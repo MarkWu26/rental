@@ -22,7 +22,7 @@ export async function POST (
         bathRoomCount,
         guestCount,
         location,
-        price
+        price,
     } = body
 
     Object.keys(body).forEach((value:any)=>{
@@ -40,9 +40,11 @@ export async function POST (
             roomCount,
             bathRoomCount,
             guestCount,
+            latlng: location.latlng,
             locationValue: location.value,
             price: parseInt(price, 10),
-            userId: currentUser.id
+            userId: currentUser.id,
+            status: 2
         }
     })
 

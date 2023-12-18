@@ -8,7 +8,7 @@ const Search = () => {
             <div className="text-sm font-semibold px-6">
                 Anywhere
             </div>
-            <div className="hidden sm:block text-sm font-sembiold px-6 border-x-[1px] flex-1 text-center">
+            <div className="hidden sm:block text-sm font-semibold px-6 border-x-[1px] flex-1 text-center">
                 Any Week
             </div>
             <div className="text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3">

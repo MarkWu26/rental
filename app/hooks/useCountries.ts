@@ -16,7 +16,9 @@ const useCountries = () => {
     }
 
     const getByLatLng = (value: Number[]) => {
-      return formattedCountries.find((item)=> item.latlng === value)
+      console.log('HAHA: ', formattedCountries)
+      const foundCountry = formattedCountries.find((item)=> item.latlng === value);
+      return foundCountry
     }
   
 

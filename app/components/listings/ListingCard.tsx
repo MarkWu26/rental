@@ -26,7 +26,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     disabled,
     actionId = "",
     actionLabel,
-    currentUser
+    currentUser,
 }) => {
     const router = useRouter()
     const {getByValue} = useCountries();
@@ -83,18 +83,28 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     src={data.imageSrc}
                     fill
                 />
-                <div className="absolute top-3 right-3">
-                    <HeartButton
-                        listingId={data.id}
-                        currentUser={currentUser}
-                    />
-                </div>
+                {(!currentUser?.isAdmin || !currentUser) && (
+                       <div className="absolute top-3 right-3">
+                       <HeartButton
+                           listingId={data.id}
+                           currentUser={currentUser}
+                       />
+                   </div>
+                )}
+             
             </div>
-            <div className='font-semibold text-lg'>
+            <div className='font-semibold text-lg justify-between flex-row flex'>
                 {location?.region}, {location?.label}
+                {data.status === 2 ? (
+                    <div className='text-yellow-600'>PENDING</div>
+                ): data.status === 3? (
+                    <div className='text-red-500'>REJECTED</div>
+                ) : null}
+             
             </div>
-            <div className='font-light next-neutral-500'>
+            <div className='font-light next-neutral-500 justify-between'>
                 {reservationDate || data.category}
+       
             </div>
             <div className="flex flex-row items-center gap-1">
                 <div className='font-semibold'>

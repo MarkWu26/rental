@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { SafeReservation, SafeUser } from "../types";
 import Container from "../components/Container";
 import Heading from "../components/Heading";
-import ListingCard from "../components/listings/ListingCard";
+import ReservationCard from "../components/reservations/ReservationCard";
 
 
 
@@ -50,12 +50,10 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
             sm:grid-cols-2
             md:grid-cols-3
             lg:grid-cols-4
-            xl:grid-cols-5
-            2xl:grid-cols-6
             gap-8
         '>
             {reservations.map((reservation)=>(
-                <ListingCard
+                <ReservationCard
                     key={reservation.id}
                     data={reservation.listing}
                     reservation={reservation}

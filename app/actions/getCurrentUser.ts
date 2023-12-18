@@ -15,6 +15,7 @@ export default async function getCurrentUser() {
       return null;
     }
 
+    //else user is logged in 
     const currentUser = await prisma.user.findUnique({
       where: {
         email: session.user.email as string,
@@ -25,13 +26,33 @@ export default async function getCurrentUser() {
       return null;
     }
 
-    return {
-      ...currentUser,
-      createdAt: currentUser.createdAt.toISOString(),
-      updatedAt: currentUser.updatedAt.toISOString(),
-      emailVerified: 
-        currentUser.emailVerified?.toISOString() || null,
-    };
+  
+
+    if(currentUser?.isAdmin === false){
+      console.log('haha')
+      return {
+        ...currentUser,
+        createdAt: currentUser.createdAt.toISOString(),
+        updatedAt: currentUser.updatedAt.toISOString(),
+        emailVerified: currentUser.emailVerified?.toISOString() || null
+      };
+    } else if(currentUser?.isAdmin === true){
+      return {
+        ...currentUser,
+        createdAt: currentUser.createdAt.toISOString(),
+        updatedAt: currentUser.updatedAt.toISOString(),
+        emailVerified: currentUser.emailVerified?.toISOString() || null,
+        isAdmin: true
+      };
+    } else {
+      return {
+        ...currentUser,
+        createdAt: currentUser.createdAt.toISOString(),
+        updatedAt: currentUser.updatedAt.toISOString(),
+        emailVerified: currentUser.emailVerified?.toISOString() || null
+      };
+    }
+   
   } catch (error: any) {
     return null;
   }

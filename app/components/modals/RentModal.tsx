@@ -52,7 +52,8 @@ const RentModal = () => {
             imageSrc: '',
             price: 1,
             title: '',
-            description: ''
+            description: '',
+            isApproved: false
         }
     })
 
@@ -95,7 +96,8 @@ const RentModal = () => {
         axios.post('/api/listings', data)
         .then(()=>{
             toast.success('Listing Created!');
-            router.refresh();
+            router.refresh()
+            router.push('/properties')
             reset();
             setStep(STEPS.CATEGORY);
             rentModal.onClose()
@@ -166,6 +168,7 @@ const RentModal = () => {
                     center={location?.latlng}
                     onChange={(value)=> setCustomValue('location', value)}
                     value={location}
+                    isDraggable={true}
                 />
             </div>
         )

@@ -18,7 +18,7 @@ interface ListingInfoProps{
         label: string;
         description: string;
     } | undefined;
-    locationValue: string;
+    locationValue: Number[];
 }
 
 const Map = dynamic(()=> import('../Map'), {
@@ -34,8 +34,8 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
     category,
     locationValue
 }) => {
-  const {getByValue} = useCountries();
-  const coordinates = getByValue(locationValue)?.latlng;
+ /*  const {getByValue} = useCountries();
+  const coordinates = getByValue(locationValue)?.latlng; */
 
   return (
     <div className="col-span-4 flex flex-col gap-8">
@@ -84,7 +84,9 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
         {description}
       </div>
       <hr/>
-      <Map center={coordinates}/>
+      <Map center={locationValue}
+      isDraggable={false}
+      />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
 import { categories } from "@/app/components/navbar/Categories";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import useSuccessModal from "@/app/hooks/useSuccessModal";
 import { SafeListings, SafeReservation, SafeUser } from "@/app/types";
 import axios from "axios";
 import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
@@ -36,6 +37,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 }) => {
     const loginModal = useLoginModal();
     const router = useRouter();
+    const successModal = useSuccessModal();
 
     const disabledDates = useMemo(()=>{
         let dates: Date[] = []
@@ -69,10 +71,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
             endDate: dateRange.endDate,
             listingId: listing?.id
         }).then(()=>{
-            toast.success('Listing Reserved Successfully!');
+        /*     toast.success('Listing Reserved Successfully!'); */
+            successModal.onOpen('Reservation on process!', 
+            'Please wait for 24 hours as we verify your reservation. Thank you!');
             setDateRange(initialDateRange);
-
-            router.push('/trips')
         }).catch(()=>{
             toast.error('Something went wrong.')
         }).finally(()=>{
@@ -82,10 +84,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
         totalPrice,
         dateRange,
         listing?.id,
-        router,
+        successModal,
         currentUser,
         loginModal
     ]);
+
+    const approveProperty = useCallback(()=>{
+        if(!currentUser?.isAdmin){
+            
+        }
+    }, [])
 
     useEffect(()=>{
         if(dateRange.startDate && dateRange.endDate){
@@ -113,7 +121,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     imageSrc={listing.imageSrc}
                     locationValue={listing.locationValue}
                     id={listing.id}
+                    userId={listing.userId}
                     currentUser={currentUser}
+                    status={listing.status}
+                    category={listing.category}
+                    latlng={listing.latlng}
+                    roomCount={listing.roomCount}
+                    bathRoomCount={listing.bathRoomCount}
+                    guestCount={listing.guestCount}
+                    listing={listing}
                 />
                 <div className="
                     grid
@@ -129,7 +145,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         roomCount={listing.roomCount}
                         guestCount={listing.guestCount}
                         bathRoomCount={listing.bathRoomCount}
-                        locationValue={listing.locationValue}
+                        locationValue={listing.latlng}
                     />
                     <div
                     className="order-first mb-10 md:order-last md:col-span-3"

@@ -8,6 +8,13 @@ import ToasterProvider from './providers/ToasterProvider'
 import LoginModal from './components/modals/LoginModal'
 import getCurrentUser from './actions/getCurrentUser'
 import RentModal from './components/modals/RentModal'
+import ApprovePropertyModal from './components/modals/ApprovePropertyModal'
+import DeletePropertyModal from './components/modals/DeletePropertyModal'
+import EditPropertyModal from './components/modals/EditPropertyModal'
+import RejectPropertyModal from './components/modals/RejectPropertyModal'
+import ApproveReservationModal from './components/modals/ApproveReservationModal'
+import RejectReservationModal from './components/modals/RejectReservationModal'
+import SuccessModal from './components/modals/SuccessModal'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -33,6 +40,13 @@ export default async function RootLayout({
           <RentModal/>
           <RegisterModal/>
           <LoginModal/>
+          <ApprovePropertyModal/>
+          <DeletePropertyModal/>
+          <EditPropertyModal/>
+          <RejectPropertyModal/>
+          <ApproveReservationModal/>
+          <RejectReservationModal/>
+          <SuccessModal/>
           <Navbar currentUser={currentUser}/>
         </ClientOnly>
         <div className='pb-20 pt-28'>

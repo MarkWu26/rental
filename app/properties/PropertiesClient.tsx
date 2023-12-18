@@ -11,12 +11,14 @@ import Heading from '../components/Heading';
 
 interface PropertiesClientProps{
     listings: SafeListings[];
-    currentUser?: SafeUser | null
+    currentUser?: SafeUser | null;
+    filter?: string
 }
 
 const PropertiesClient: React.FC<PropertiesClientProps> = ({
     listings,
-    currentUser
+    currentUser,
+    filter = "All"
 }) => {
     const router = useRouter()
     const [deletingId, setDeletingId] = useState('');
@@ -36,9 +38,11 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
 
   return (
     <Container>
+        <div className="pt-16">
         <Heading
-            title="Properties"
-            subtitle="List of your properties "
+            title={`${filter} Properties`}
+            subtitle={`${filter === 'All' ? `List of ${filter.toLowerCase()} your properties`
+             : `List of your ${filter.toLowerCase()} properties`} `}
         />
         <div className='
             mt-10
@@ -47,15 +51,12 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
             sm:grid-cols-2
             md:grid-cols-3
             lg:grid-cols-4
-            xl:grid-cols-5
-            2xl:grid-cols-6
             gap-8
         '>
             {listings.map((listing)=>(
                 <ListingCard
                     key={listing.id}
                     data={listing}
-                
                     actionId={listing.id}
                     onAction={onCancel}
                     disabled={deletingId === listing.id}
@@ -64,6 +65,7 @@ const PropertiesClient: React.FC<PropertiesClientProps> = ({
                 />
             ))}
         </div>  
+        </div>
     </Container>
   )
 }

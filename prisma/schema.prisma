@@ -20,7 +20,7 @@ model User{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   favoriteIds String[] @db.ObjectId
-  
+  isAdmin Boolean?
   accounts Account[]
   listings Listing[]
   reservations Reservation[]
@@ -56,9 +56,10 @@ model Listing{
   bathRoomCount Int
   guestCount Int
   locationValue String
+  latlng Float[]
+  status Int //status of the property | 1 = approved | 2 = pending | 3 = rejected
   userId String @db.ObjectId
   price Int
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
 
@@ -70,6 +71,7 @@ model Reservation {
   listingId String @db.ObjectId
   startDate DateTime
   endDate DateTime
+  status Int //status of the reservation | 1 = approved | 2 = pending | 3 = rejected
   totalPrice Int
   createdAt DateTime @default(now())
 

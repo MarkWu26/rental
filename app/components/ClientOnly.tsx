@@ -2,13 +2,17 @@
 
 import {useState, useEffect} from 'react'
 
+import { useRouter } from 'next/router'
+
 interface ClientOnlyProps{
     children: React.ReactNode
+
 }
 
 const ClientOnly: React.FC<ClientOnlyProps> = ({children}) => {
-    const [hasMounted, setHasMounted] = useState()
+    const [hasMounted, setHasMounted] = useState<boolean>()
 
+  
     useEffect(()=>{
         setHasMounted(true)
     }, [])

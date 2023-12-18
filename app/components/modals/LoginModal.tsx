@@ -52,7 +52,15 @@ const LoginModal = () => {
 
         if(callback?.ok){
             toast.success('Logged in successfully');
-            router.refresh()
+            if(data.email === 'admin@gmail.com'){
+                console.log('yoyoyo')
+                router.push('/admin');
+                router.refresh();
+            }else{
+            console.log('lol')
+                router.refresh()
+            }
+            
             loginModal.onClose()
         }
         if(callback?.error){

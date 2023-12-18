@@ -47,13 +47,14 @@ export const authOptions: AuthOptions = {
                     throw new Error('Invalid Credentials!')
                 }
 
+
                 return user;
             }
         })
     ],
-    pages: {
+   /*  pages: {
         signIn: '/'
-    },
+    }, */
     debug: process.env.NODE_ENV === 'development',
     session: {
         strategy: 'jwt'

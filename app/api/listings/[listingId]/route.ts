@@ -23,6 +23,15 @@ export async function DELETE(
         throw new Error('Invalid Id')
     }
 
+    if(currentUser.email === 'admin@gmail.com'){
+        const listing = await prisma.listing.deleteMany({
+            where:{
+                id:listingId
+            }
+        })
+        return NextResponse.json(listing)
+    }
+
     const listing = await prisma.listing.deleteMany({
         where:{
             id: listingId,
