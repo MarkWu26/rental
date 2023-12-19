@@ -20,7 +20,7 @@ const initialDateRange = {
     key: 'selection'
 }
 
-interface ListingClientProps{
+interface ReservationClientProps{
     reservation: SafeReservation & {
         user: SafeUser
     };
@@ -31,7 +31,7 @@ interface ListingClientProps{
     allReservations: SafeReservation []
 }
 
-const ListingClient: React.FC<ListingClientProps> = ({
+const ReservationClient: React.FC<ReservationClientProps> = ({
     currentUser,
     listing,
     reservation,
@@ -176,4 +176,4 @@ const ListingClient: React.FC<ListingClientProps> = ({
   )
 }
 
-export default ListingClient
+export default ReservationClient

@@ -23,7 +23,9 @@ enum STEPS {
     INFO = 2,
     IMAGES = 3,
     DESCRIPTION = 4,
-    PRICE = 5
+    PRICE = 5,
+    ID = 6,
+    DOCUMENTS = 7
 }
 
 const RentModal = () => {
@@ -53,7 +55,9 @@ const RentModal = () => {
             price: 1,
             title: '',
             description: '',
-            isApproved: false
+            isApproved: false,
+            documentImageSrc: '',
+            idImageSrc: ''
         }
     })
 
@@ -62,7 +66,9 @@ const RentModal = () => {
     const guestCount = watch('guestCount')
     const roomCount = watch('roomCount')
     const bathRoomCount = watch('bathRoomCount')
-    const imageSrc = watch('imageSrc')
+    const imageSrc = watch('imageSrc');
+    const documentImageSrc = watch('documentImageSrc');
+    const idImageSrc = watch('idImageSrc')
 
     const Map = useMemo(()=> dynamic(()=> import('../Map'), {
         ssr:false
@@ -87,7 +93,7 @@ const RentModal = () => {
     }
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        if(step !== STEPS.PRICE){
+        if(step !== STEPS.DOCUMENTS){
             return onNext();
         }
 
@@ -109,7 +115,7 @@ const RentModal = () => {
     }
 
     const actionLabel = useMemo(()=>{
-        if(step === STEPS.PRICE){
+        if(step === STEPS.DOCUMENTS ){
             return 'Create';
         }
 
@@ -263,6 +269,37 @@ const RentModal = () => {
                     register={register}
                     errors={errors}
                     required
+                />
+            </div>
+        )
+    }
+
+    if(step === STEPS.ID){
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <Heading
+                title="Upload a picture of your valid ID"
+                subtitle="Verify the ownership of your property!"
+                />
+                  <ImageUpload
+                    value={idImageSrc}
+                    onChange={(value)=> setCustomValue('idImageSrc', value)}
+                />
+            </div>
+        )
+    }
+
+    if(step === STEPS.DOCUMENTS){
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <Heading
+                title="Upload a picture of Transfer Certificate of Title or 
+                Tax Declaration of your property"
+                subtitle="Verify the ownership of your property!"
+                />
+                  <ImageUpload
+                    value={documentImageSrc}
+                    onChange={(value)=> setCustomValue('documentImageSrc', value)}
                 />
             </div>
         )

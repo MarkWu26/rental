@@ -13,10 +13,9 @@ const SuccessModal = () => {
     const router = useRouter();
    
     const SuccessModal = useSuccessModal();
-    const [isLoading, setIsLoading] = useState(false)
   
     const toggle = useCallback(()=>{
-        SuccessModal.onClose
+        SuccessModal.onClose();
         router.push('/trips');
         router.refresh();
     }, [router, SuccessModal])
@@ -35,7 +34,6 @@ const SuccessModal = () => {
 
   return (
     <Modal
-    disabled={isLoading}
     isOpen={SuccessModal.isOpen}
     title="Reservation processing"
     actionLabel='Continue'

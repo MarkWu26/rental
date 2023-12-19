@@ -15,6 +15,8 @@ import useDeletePropertyModal from "@/app/hooks/useDeletePropertyModal";
 import useEditPropertyModal from "@/app/hooks/useEditPropertyModal";
 import useRejectPropertyModal from "@/app/hooks/useRejectPropertyModal";
 import useSuccessModal from "@/app/hooks/useSuccessModal";
+import axios from 'axios'
+import { useRouter } from "next/navigation";
 
 interface ListingHeadProps{
     title: string;
@@ -50,6 +52,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     const editModal = useEditPropertyModal();
     const rejectModal = useRejectPropertyModal();
     const successModal = useSuccessModal();
+    const router = useRouter();
 
     const onApprove= useCallback(()=>{
         if(!currentUser?.isAdmin){
@@ -107,6 +110,13 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         userId,
         id
     ])
+
+    const onCreateChat = useCallback(()=>{
+        axios.post('/api/conversations', { userId: userId })
+        .then((data) => {
+          router.push(`/conversations/${data.data.id}`);
+        })
+    }, [router, userId])
 
     const location = getByValue(locationValue)
   return (
@@ -196,6 +206,28 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 >
                     <div></div>
                     Delete
+                    <MdDeleteOutline
+                        size={22}
+                    />
+                </button>
+            </>
+        )}
+        {userId !== currentUser?.id && (
+             <>
+             <button 
+                className="
+                items-center 
+                flex py-[10px] 
+                rounded-[10px]
+                bg-indigo-700
+                text-white
+                px-6 
+                gap-x-2
+                text-md hover:opacity-90"
+                onClick={onCreateChat}
+                >
+                    <div></div>
+                    Chat with owner
                     <MdDeleteOutline
                         size={22}
                     />

@@ -37,7 +37,7 @@ const HomeClient: React.FC<HomeClientProps> = ({
       gap-8
     ">
      
-       {listings.map((listing)=>{
+       {listings?.map((listing)=>{
         return (
             <ListingCard
             key={listing.id}

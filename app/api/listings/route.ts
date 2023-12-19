@@ -23,6 +23,8 @@ export async function POST (
         guestCount,
         location,
         price,
+        idImageSrc,
+        documentImageSrc
     } = body
 
     Object.keys(body).forEach((value:any)=>{
@@ -36,6 +38,8 @@ export async function POST (
             title,
             description,
             imageSrc,
+            idImageSrc,
+            documentImageSrc,
             category,
             roomCount,
             bathRoomCount,

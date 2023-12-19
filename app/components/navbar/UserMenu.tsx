@@ -25,6 +25,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
     const loginModal = useLoginModal()
     const rentModal = useRentModal()
     const [isOpen, setIsOpen] = useState(false)
+    console.log('the current user is: ', currentUser)
     
    
     const toggleOpen = useCallback(()=>{

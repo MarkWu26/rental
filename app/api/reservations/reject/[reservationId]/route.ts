@@ -19,6 +19,13 @@ export async function PATCH(
 
     const {reservationId} = params;
 
+    const body = await request.json();
+    const {reason} = body;
+
+    if(!reason){
+        throw new Error ('Please provide a reason!')
+    }
+
     if(!reservationId || typeof reservationId !== 'string'){
         throw new Error('Invalid Id')
     }
@@ -31,7 +38,8 @@ export async function PATCH(
             }
         },
         data:{
-            status: 3 // 3 for reject status
+            status: 3, // 3 for reject status
+            reason: reason
         }
     })
 

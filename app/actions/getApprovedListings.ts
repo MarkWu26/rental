@@ -6,7 +6,7 @@ export default async function getApprovedListings(
     try {
 
         let query: any = {
-            status:1
+            status: 1
         };
 
         const listings = await prisma.listing.findMany({

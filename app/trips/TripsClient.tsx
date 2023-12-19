@@ -6,7 +6,7 @@ import Container from '../components/Container';
 import { useRouter } from 'next/navigation';
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
-import ListingCard from '../components/listings/ListingCard';
+import TripsCard from '../components/trips/TripsCard';
 import Heading from '../components/Heading';
 
 interface TripsClientProps{
@@ -50,7 +50,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
             gap-8
         '>
             {reservations.map((reservation)=>(
-                <ListingCard
+                <TripsCard
                     key={reservation.id}
                     data={reservation.listing}
                     reservation={reservation}

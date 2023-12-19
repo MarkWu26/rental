@@ -15,6 +15,8 @@ import RejectPropertyModal from './components/modals/RejectPropertyModal'
 import ApproveReservationModal from './components/modals/ApproveReservationModal'
 import RejectReservationModal from './components/modals/RejectReservationModal'
 import SuccessModal from './components/modals/SuccessModal'
+import AuthContext from './context/AuthContext'
+import LayoutClient from './LayoutClient'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -31,10 +33,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+ 
+  
   const currentUser = await getCurrentUser();
   return (
     <html lang="en">
       <body className={font.className}>
+        <AuthContext>
         <ClientOnly>
           <ToasterProvider/>
           <RentModal/>
@@ -49,10 +54,8 @@ export default async function RootLayout({
           <SuccessModal/>
           <Navbar currentUser={currentUser}/>
         </ClientOnly>
-        <div className='pb-20 pt-28'>
-        {children}
-        </div>
-      
+        <LayoutClient>{children}</LayoutClient>
+        </AuthContext>
         </body>
     </html>
   )

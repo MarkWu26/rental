@@ -1,6 +1,6 @@
 'use client'
 import Container from '../Container'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from './Logo'
 import Search from './Search'
 import UserMenu from './UserMenu'
@@ -9,6 +9,7 @@ import { SafeUser } from '@/app/types'
 import ClientOnly from '../ClientOnly'
 import Filter from './Filter'
 import AdminMenu from './AdminMenu'
+import { usePathname } from 'next/navigation'
 
 interface NavbarProps{
   currentUser?: SafeUser | null;
@@ -17,9 +18,9 @@ interface NavbarProps{
 const Navbar: React.FC<NavbarProps> = ({
   currentUser
 }) => {
+  const pathname = usePathname();
 
-  return (
-    <ClientOnly>
+  const [body, setBody] = useState<JSX.Element | null>(<ClientOnly>
     <div className="fixed w-full bg-white z-10 shadow-sm">
         <div className="py-4 border-b-[1px]">
             <Container>
@@ -38,8 +39,18 @@ const Navbar: React.FC<NavbarProps> = ({
         <Filter currentUser={currentUser}/>
         <Categories/>
     </div>
-    </ClientOnly>
-  )
+    </ClientOnly>)
+
+ 
+
+    useEffect(()=>{
+      if(pathname?.includes('/conversations')){
+        console.log('hoho')
+        setBody(null)
+      }
+    }, [pathname])
+
+  return body
 }
 
 export default Navbar

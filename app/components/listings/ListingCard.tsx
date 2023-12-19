@@ -96,9 +96,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <div className='font-semibold text-lg justify-between flex-row flex'>
                 {location?.region}, {location?.label}
                 {data.status === 2 ? (
-                    <div className='text-yellow-600'>PENDING</div>
+                    <div className='text-yellow-600'>Pending</div>
                 ): data.status === 3? (
-                    <div className='text-red-500'>REJECTED</div>
+                    <div className='text-red-500'>Rejected</div>
                 ) : null}
              
             </div>

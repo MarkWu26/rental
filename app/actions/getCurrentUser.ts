@@ -26,6 +26,7 @@ export default async function getCurrentUser() {
       return null;
     }
 
+    console.log('the current user isss: ', currentUser)
   
 
     if(currentUser?.isAdmin === false){
