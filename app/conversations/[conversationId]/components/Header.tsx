@@ -49,11 +49,13 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
         sm:px-4 
         py-3 
         px-4 
+        lg:pr-[420px]
         lg:px-6 
         justify-between 
         items-center 
         shadow-sm
-        
+        fixed
+        top-0
         z-[999]
       "
     >
@@ -83,6 +85,7 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           </div>
         </div>
       </div>
+      <div className="px-5 cursor-pointer ">
       <HiEllipsisHorizontal
         size={32}
         onClick={() => setDrawerOpen(true)}
@@ -93,6 +96,7 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           transition
         "
       />
+      </div>
     </div>
     </>
   );
