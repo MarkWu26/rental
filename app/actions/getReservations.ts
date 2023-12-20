@@ -50,6 +50,7 @@ export default async function getReservations(
     }))
 
     return safeReservations
+
     } catch (error: any) {
         console.error(error)
         console.log('there is an error: ', error)

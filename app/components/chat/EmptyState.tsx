@@ -13,10 +13,11 @@ const EmptyState = () => {
         items-center 
         bg-gray-100
       "
+      style={{height:'100vh'}}
     >
       <div className="text-center items-center flex flex-col">
         <h3 className="mt-2 text-2xl font-semibold text-gray-900">
-          Looks like you have no conversations yet.
+          Please select a conversation.
         </h3>
       </div>
     </div>

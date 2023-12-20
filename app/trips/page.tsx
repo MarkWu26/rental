@@ -7,11 +7,6 @@ import TripsClient from "./TripsClient";
 
 const TripsPage = async () => {
     const currentUser = await getCurrentUser();
-    const reservations = await getReservations({
-        userId: currentUser?.id
-    })
-
-
     if(!currentUser){
         return (
             <ClientOnly>
@@ -23,6 +18,12 @@ const TripsPage = async () => {
         )
     }
 
+    const reservations = await getReservations({
+        userId: currentUser.id
+    })
+
+
+    
   
     if(reservations.length === 0) {
         return (

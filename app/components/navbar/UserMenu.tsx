@@ -11,6 +11,7 @@ import { SafeUser } from '@/app/types'
 import useRentModal from '@/app/hooks/useRentModal'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
+import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
 
 
 interface UserMenuProps{
@@ -25,7 +26,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
     const loginModal = useLoginModal()
     const rentModal = useRentModal()
     const [isOpen, setIsOpen] = useState(false)
-    console.log('the current user is: ', currentUser)
     
    
     const toggleOpen = useCallback(()=>{
@@ -52,11 +52,24 @@ const UserMenu: React.FC<UserMenuProps> = ({
   return (
     <div className="relative">
         <div className="flex flex-row items-center gap-3">
+            {currentUser && (
+                <div
+                className="cursor-pointer text-rose-500 transition-all ease-in-out duration-200
+                hover:opacity-90
+                "
+                onClick={()=> router.push('/conversations')}
+                >
+                <HiChatBubbleLeftEllipsis
+                size={26}
+                />
+                </div>
+            )}
+            
             <div
             onClick={onRent}
             className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
             >
-                Airbnb your home
+                Snapp Your Home !
             </div>
             <div
             onClick={toggleOpen}
@@ -82,7 +95,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                               <MenuItem onClick={()=> router.push('/properties')} 
                               label="My properties"/>
                               <MenuItem onClick={onRent} 
-                              label="Airbnb my home"/>
+                              label="Snapp my home"/>
                               <hr/>
                               
                               <MenuItem onClick={signout} 

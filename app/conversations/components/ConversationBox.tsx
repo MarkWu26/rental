@@ -22,6 +22,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
   selected 
 }) => {
   const otherUser = useOtherUser(data);
+  console.log('other user: ', otherUser)
   const session = useSession();
   const router = useRouter();
 
@@ -83,11 +84,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         selected ? 'bg-neutral-100' : 'bg-white'
       )}
     >
-      {data.isGroup ? (
-        <AvatarGroup users={data.users} />
-      ) : (
+     
         <Avatar user={otherUser} />
-      )}
+     
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <span className="absolute inset-0" aria-hidden="true" />

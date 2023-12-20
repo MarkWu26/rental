@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
         shadow-sm
         fixed
         top-0
-        z-[999]
+        
       "
     >
       <div className="flex gap-3 items-center">

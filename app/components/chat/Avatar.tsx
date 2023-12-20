@@ -10,6 +10,7 @@ interface AvatarProps {
 };
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {
+  console.log('haha:L', user?.image)
   const { members } = useActiveList();
   const isActive = members.indexOf(user?.email!) !== -1;
 
@@ -24,10 +25,12 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         w-9 
         md:h-11 
         md:w-11
-      ">
+      "
+      style={{zIndex: -1}}
+      >
         <Image
           fill
-          src={user?.image || '/images/placeholder.jpg'}
+          src={user?.image || "/images/placeholder.jpg"}
           alt="Avatar"
         />
       </div>
