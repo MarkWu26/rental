@@ -64,7 +64,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           </div>
           {(currentUser?.id === user.id || currentUser?.isAdmin )&& (
           <div className="flex flex-row gap-3">{status === 1 ? (
-            <div className="text-green-500">Confirmed</div>
+            <div className="text-green-500">Active</div>
           ): status === 2 ? (
             <div className="text-yellow-500">Pending</div>
           ): (

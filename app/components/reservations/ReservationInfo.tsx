@@ -92,10 +92,10 @@ const ReservationInfo
         </div>
 
         <div className='flex flex-col gap-2'>
-        <div>
+        <div className="font-semibold text-xl">
         Reason for rejection:
         </div>
-        <div>
+        <div className='text-neutral-500'>
             {rejectionReason}
         </div>
         
