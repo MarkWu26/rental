@@ -45,27 +45,22 @@ const LoginModal = () => {
 
        signIn('credentials', {
         ...data,
-        redirect: false,
+        redirect: true,
        })
-       .then((callback)=>{
+       .then((callback: any)=>{
         setIsLoading(false);
-
         if(callback?.ok){
-            toast.success('Logged in successfully');
             if(data.email === 'admin@gmail.com'){
-                console.log('yoyoyo')
-                router.push('/admin');
-                router.refresh();
-            }else{
-            console.log('lol')
-                router.refresh()
+                router.push('/admin')
+            } else {
+                router.push('/')
             }
-            
-            loginModal.onClose()
+        } else {
+            toast.error('Something happened!')
         }
-        if(callback?.error){
-            toast.error(callback.error)
-        }
+       router.refresh();
+       }).finally(()=>{
+        loginModal.onClose()
        })
     }
 
@@ -118,7 +113,7 @@ const LoginModal = () => {
         <div className='text-neutral-500 text-center mt-4 font-light'>
             <div className='justify-center flex flex-row items-center gap-2'> 
                 <div>
-                First time using Airbnb?
+                First time using Snappstay?
                 </div>
                 <div className="text-neutral-800 cursor-pointer hover:underline"
                 onClick={toggle}

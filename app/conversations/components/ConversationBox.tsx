@@ -85,7 +85,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       )}
     >
      
-        <Avatar user={otherUser} />
+        <Avatar user={otherUser} isSidebar/>
      
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">

@@ -19,6 +19,8 @@ interface TripsInfoProps{
         description: string;
     } | undefined;
     locationValue: Number[];
+    status: Number;
+    propertyOwner: SafeUser ;
 }
 
 const Map = dynamic(()=> import('../Map'), {
@@ -32,7 +34,9 @@ const TripsInfo: React.FC<TripsInfoProps> = ({
     roomCount,
     bathRoomCount,
     category,
-    locationValue
+    locationValue,
+    status,
+    propertyOwner
 }) => {
  /*  const {getByValue} = useCountries();
   const coordinates = getByValue(locationValue)?.latlng; */
@@ -48,8 +52,8 @@ const TripsInfo: React.FC<TripsInfoProps> = ({
           items-center
           gap-2
         ">
-          <div>Hosted by {user?.name}</div>
-          <Avatar src={user?.image}/>
+          <div>Hosted by {propertyOwner?.name}</div>
+          <Avatar src={propertyOwner?.image}/>
         </div>
         <div className="
           flex

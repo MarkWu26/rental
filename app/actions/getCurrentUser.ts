@@ -26,8 +26,6 @@ export default async function getCurrentUser() {
       return null;
     }
 
-    console.log('the current user isss: ', currentUser)
-  
 
     if(currentUser?.isAdmin === false){
       console.log('haha')
@@ -35,7 +33,8 @@ export default async function getCurrentUser() {
         ...currentUser,
         createdAt: currentUser.createdAt.toISOString(),
         updatedAt: currentUser.updatedAt.toISOString(),
-        emailVerified: currentUser.emailVerified?.toISOString() || null
+        emailVerified: currentUser.emailVerified?.toISOString() || null,
+        isAdmin: false
       };
     } else if(currentUser?.isAdmin === true){
       return {

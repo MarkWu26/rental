@@ -17,6 +17,7 @@ import RejectReservationModal from './components/modals/RejectReservationModal'
 import SuccessModal from './components/modals/SuccessModal'
 import AuthContext from './context/AuthContext'
 import LayoutClient from './LayoutClient'
+import ReservationModal from './components/modals/ReservationModal'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -24,8 +25,8 @@ const font = Nunito({
 
 
 export const metadata: Metadata = {
-  title: 'Airbnb',
-  description: 'Airbnb clone',
+  title: 'Snappstay',
+  description: 'Snappstay, a rental web application',
 }
 
 export default async function RootLayout({
@@ -36,6 +37,7 @@ export default async function RootLayout({
  
   
   const currentUser = await getCurrentUser();
+  console.log('the currentUser is', currentUser)
   return (
     <html lang="en">
       <body className={font.className}>
@@ -52,7 +54,8 @@ export default async function RootLayout({
           <ApproveReservationModal/>
           <RejectReservationModal/>
           <SuccessModal/>
-          <Navbar currentUser={currentUser}/>
+          <ReservationModal/>
+          <Navbar/>
         </ClientOnly>
         <LayoutClient>{children}</LayoutClient>
         </AuthContext>

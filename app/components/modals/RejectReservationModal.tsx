@@ -20,7 +20,7 @@ const RejectReservationModal = () => {
         RejectReservationModal.onClose();
     }, [RejectReservationModal])
 
-    const approvingId = useRejectReservation().reservationId;
+    const rejectingId = useRejectReservation().reservationId;
 
     const {
       register,
@@ -37,18 +37,11 @@ const RejectReservationModal = () => {
       }
   })
 
-  const setCustomValue = (id: string, value: any) => {
-    setValue(id, value, {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true
-    })
-}
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
       setIsLoading(true);
 
-      axios.patch(`/api/reservations/reject/${approvingId}`, data)
+      axios.patch(`/api/reservations/reject/${rejectingId}`, data)
       .then(()=>{
         toast.success('Property Listing Rejected Successfully!');
         router.refresh();

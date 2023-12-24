@@ -22,9 +22,10 @@ const HomeClient: React.FC<HomeClientProps> = ({
     const router = useRouter()
     useEffect(()=>{
         if(currentUser?.isAdmin){
+            console.log(currentUser?.isAdmin)
             return router.push('/admin')
         }
-    }, [router, currentUser])
+    }, [router, currentUser?.isAdmin])
   return (
     <Container>
     <div className="
@@ -43,6 +44,7 @@ const HomeClient: React.FC<HomeClientProps> = ({
             key={listing.id}
             data={listing}
             currentUser={currentUser}
+            isHomepage
           />
         )
        })}

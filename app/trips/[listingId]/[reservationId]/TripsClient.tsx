@@ -3,7 +3,7 @@
 import Container from "@/app/components/Container";
 import TripsHead from "@/app/components/trips/TripsHead";
 import TripsInfo from "@/app/components/trips/TripsInfo";
-import ListingReservation from "@/app/components/reservations/ListingReservation";
+import ListingReservation from "@/app/components/trips/ListingReservation";
 import { categories } from "@/app/components/navbar/Categories";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListings, SafeReservation, SafeUser } from "@/app/types";
@@ -155,6 +155,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
                         bathRoomCount={listing.bathRoomCount}
                         locationValue={listing.latlng}
                         status={reservation.status}
+                        propertyOwner={listing.user}
                     />
                     <div
                     className="order-first mb-10 md:order-last md:col-span-3"

@@ -1,6 +1,6 @@
 'use client'
 
-import useCountries from "@/app/hooks/useCountries";
+import Image from 'next/image'
 import { SafeUser } from "@/app/types"
 import { IconType } from "react-icons";
 import Avatar from "../Avatar";
@@ -20,6 +20,8 @@ interface ReservationInfoProps{
     } | undefined;
     locationValue: Number[];
     status: Number;
+    guestIdPic: string;
+    rejectionReason: string;
 }
 
 const Map = dynamic(()=> import('../Map'), {
@@ -35,11 +37,12 @@ const ReservationInfo
     bathRoomCount,
     category,
     locationValue,
-    status
+    status,
+    guestIdPic,
+    rejectionReason
 }) => {
  /*  const {getByValue} = useCountries();
   const coordinates = getByValue(locationValue)?.latlng; */
-console.log('userrrr: ', user)
   return (
     <div className="col-span-4 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
@@ -87,6 +90,16 @@ console.log('userrrr: ', user)
           </div>
 
         </div>
+
+        <div className='flex flex-col gap-2'>
+        <div>
+        Reason for rejection:
+        </div>
+        <div>
+            {rejectionReason}
+        </div>
+        
+        </div>
       </div>
       <hr/>
       {category && (
@@ -104,6 +117,20 @@ console.log('userrrr: ', user)
       <Map center={locationValue}
       isDraggable={false}
       />
+      <hr/>
+      <div className="gap-4 flex flex-col text-xl font-semibold">
+        <div>
+          Guest ID
+        </div>
+        <div className="w-full rounded-xl h-[40vh] overflow-hidden relative">
+            <Image
+            alt="Guest ID Picture"
+            src={guestIdPic}
+            fill
+            className="object-fit w-full"
+            />
+        </div>
+      </div>
     </div>
   )
 }

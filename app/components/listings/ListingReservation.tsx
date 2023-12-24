@@ -3,6 +3,9 @@
 import {Range} from 'react-date-range'
 import Calendar from '../inputs/Calendar';
 import Button from '../Button';
+import { SafeUser } from '@/app/types';
+import useReservationModal from '@/app/hooks/useReservationModal';
+
 
 interface ListingReservationProps{
     price: number;
@@ -11,7 +14,10 @@ interface ListingReservationProps{
     dateRange: Range;
     onSubmit: () => void;
     disabled?: boolean;
-    disabledDates: Date[]
+    disabledDates: Date[];
+    currentUser?: SafeUser | null;
+    user: SafeUser;
+    listingId: string;
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -21,8 +27,12 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     dateRange,
     onSubmit,
     disabledDates,
-    disabled
+    disabled,
+    currentUser,
+    user,
+    listingId,
 }) => {
+    const reservationModal = useReservationModal();
   return (
     <div className='
         bg-white
@@ -30,7 +40,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         border-[1px]
         border-neutral-200
         overflow-hidden
-
+        mb-8
     '>
         <div className='
             flex flex-row items-center gap-1 p-4
@@ -49,13 +59,18 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 onChange={(value)=>onChangeDate(value.selection)}
         />
         <hr/>
-        <div className='p-4'>
+        {(((currentUser?.isAdmin === false || currentUser?.isAdmin === null) 
+        && currentUser?.id !== user.id) || !currentUser) && (
+            <div className='p-4'>
             <Button
                 disabled={disabled}
                 label="Reserve Now"
-                onClick={onSubmit}
+                onClick={()=> reservationModal.onOpen(totalPrice, dateRange.startDate, 
+                    dateRange.endDate, listingId)}
             />
-        </div>
+            </div>
+        )}
+       
         <div className="
             p-4
             flex
@@ -77,4 +92,4 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   )
 }
 
-export default ListingReservation
+export default ListingReservation  

@@ -10,6 +10,7 @@ import {signOut} from 'next-auth/react'
 import { SafeUser } from '@/app/types'
 import useRentModal from '@/app/hooks/useRentModal'
 import { useRouter } from 'next/navigation'
+import {toast} from 'react-hot-toast'
 
 
 interface AdminMenuProps{
@@ -19,6 +20,7 @@ interface AdminMenuProps{
 const AdminMenu: React.FC<AdminMenuProps> = ({
     currentUser
 }) => {
+    console.log('HAHAHA', currentUser)
     const router = useRouter();
     const registerModal = useRegisterModal()
     const loginModal = useLoginModal()
@@ -40,8 +42,10 @@ const AdminMenu: React.FC<AdminMenuProps> = ({
     }, [currentUser, loginModal, rentModal]);
 
     const signout = useCallback(()=>{
-        signOut();
+        signOut({callbackUrl: '/'});
+        toast.success('Logged out successfuly')
         router.push('/');
+        router.refresh();
     }, [router]);
 
 
@@ -52,7 +56,7 @@ const AdminMenu: React.FC<AdminMenuProps> = ({
             onClick={onRent}
             className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
             >
-                Airbnb your home
+                Snapp your home
             </div>
             <div
             onClick={toggleOpen}
@@ -78,10 +82,10 @@ const AdminMenu: React.FC<AdminMenuProps> = ({
                               <MenuItem onClick={()=> router.push('/properties')} 
                               label="My properties"/>
                               <MenuItem onClick={onRent} 
-                              label="Airbnb my home"/>
+                              label="Snapp my home"/>
                               <hr/>
                               
-                              <MenuItem onClick={()=>signout()} 
+                              <MenuItem onClick={signout} 
                               label="Logout"/>
                   
                             

@@ -10,6 +10,7 @@ import useSuccessModal from "@/app/hooks/useSuccessModal";
 import { SafeListings, SafeReservation, SafeUser } from "@/app/types";
 import axios from "axios";
 import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
@@ -146,9 +147,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         guestCount={listing.guestCount}
                         bathRoomCount={listing.bathRoomCount}
                         locationValue={listing.latlng}
+                        docImageSrc={listing.documentImageSrc}
+                        currentUser={currentUser}
+                        status={listing.status}
                     />
                     <div
-                    className="order-first mb-10 md:order-last md:col-span-3"
+                    className="order-first mb-10 md:order-last md:col-span-3 flex-col flex"
                     >
                         <ListingReservation
                             price={listing.price}
@@ -158,7 +162,37 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             onSubmit={onCreateReservation}
                             disabled={isLoading}
                             disabledDates={disabledDates}
+                            currentUser={currentUser}
+                            user={listing.user}
+                            listingId={listing.id}
+                          
                         />
+                        {currentUser?.isAdmin && (
+                            <hr/>
+                        )}
+                       
+                        {currentUser?.isAdmin && (
+                            <div className="text-xl font-semibold flex flex-col mt-8 gap-4">
+                            Owner ID
+                            <div className="
+                                overflow-hidden 
+                                w-full 
+                                rounded-xl 
+                                h-[30vh]
+                                relative
+                                "
+                            >
+                                <Image
+                                src={listing.idImageSrc}
+                                alt="id"
+                                className="object-fit w-full"
+                                fill
+                                />
+
+                            </div>
+                            </div>
+                        )}
+                       
                     </div>
                 </div>
             </div>

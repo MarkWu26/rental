@@ -7,12 +7,21 @@ import { User } from "@prisma/client";
 
 interface AvatarProps {
   user?: User;
+  isBody?: boolean;
+  isSidebar?: boolean
 };
 
-const Avatar: React.FC<AvatarProps> = ({ user }) => {
+const Avatar: React.FC<AvatarProps> = ({ 
+  user,
+  isBody,
+  isSidebar
+}) => {
   console.log('haha:L', user?.image)
   const { members } = useActiveList();
   const isActive = members.indexOf(user?.email!) !== -1;
+  const avatarStyle = {
+    zIndex: isBody ? -1 : isSidebar ? 1 : undefined
+  }
 
   return (
     <div className="relative">
@@ -26,12 +35,14 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         md:h-11 
         md:w-11
       "
-      style={{zIndex: -1}}
+      style={avatarStyle}
+      /* style={{zIndex: -1}} */
       >
         <Image
           fill
           src={user?.image || "/images/placeholder.jpg"}
           alt="Avatar"
+        /*   style{{o}} */
         />
       </div>
       {isActive ? (

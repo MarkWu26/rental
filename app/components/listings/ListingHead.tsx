@@ -17,6 +17,7 @@ import useRejectPropertyModal from "@/app/hooks/useRejectPropertyModal";
 import useSuccessModal from "@/app/hooks/useSuccessModal";
 import axios from 'axios'
 import { useRouter } from "next/navigation";
+import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
 
 interface ListingHeadProps{
     title: string;
@@ -168,7 +169,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             </>
             
         )}
-        {(currentUser?.isAdmin || userId === currentUser?.id) && (
+        {status !== 3 && (currentUser?.isAdmin || userId === currentUser?.id) && (
             <>
                 <button 
                 className="
@@ -212,7 +213,8 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 </button>
             </>
         )}
-        {userId !== currentUser?.id && (
+        {(userId !== currentUser?.id && (currentUser?.isAdmin === false || currentUser?.isAdmin === null)) 
+        && (
              <>
              <button 
                 className="
@@ -228,7 +230,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 >
                     <div></div>
                     Chat with owner
-                    <MdDeleteOutline
+                    <HiChatBubbleLeftEllipsis
                         size={22}
                     />
                 </button>

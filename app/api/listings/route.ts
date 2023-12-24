@@ -48,7 +48,8 @@ export async function POST (
             locationValue: location.value,
             price: parseInt(price, 10),
             userId: currentUser.id,
-            status: 2
+            status: 2,
+            reason: ''
         }
     })
 

@@ -8,6 +8,7 @@ export async function POST(
 ){
     const currentUser = await getCurrentUser();
 
+   
     if(!currentUser){
         return NextResponse.error()
     }
@@ -19,7 +20,13 @@ export async function POST(
         startDate,
         endDate,
         totalPrice,
+        idImageSrc
     } = body;
+
+    console.log('id image src: ', idImageSrc)
+    console.log('totalPrice ', totalPrice)
+    console.log('listingId ', listingId);
+    console.log('start date', startDate)
 
     if (!listingId || !startDate || !endDate || !totalPrice ){
         return NextResponse.error();
@@ -37,7 +44,8 @@ export async function POST(
                     endDate,
                     totalPrice,
                     status: 2,
-                    reason: ''
+                    reason: '',
+                    idImageSrc: idImageSrc
                 }
             }
         }

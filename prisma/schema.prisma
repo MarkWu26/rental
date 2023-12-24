@@ -71,6 +71,8 @@ model Listing{
   price Int
   idImageSrc String //image of valid id of user
   documentImageSrc String //image of required documents
+  reason String
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
 
@@ -86,6 +88,7 @@ model Reservation {
   totalPrice Int
   createdAt DateTime @default(now())
   reason String //state reason why the reservation is rejected
+  idImageSrc String //image of valid id of user
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

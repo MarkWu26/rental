@@ -155,6 +155,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                         bathRoomCount={listing.bathRoomCount}
                         locationValue={listing.latlng}
                         status={reservation.status}
+                        guestIdPic={reservation.idImageSrc}
+                        rejectionReason={reservation.reason}
                     />
                     <div
                     className="order-first mb-10 md:order-last md:col-span-3"
@@ -167,6 +169,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                             onSubmit={onCreateReservation}
                             disabled={isLoading}
                             disabledDates={disabledDates}
+                           
                         />
                     </div>
                 </div>

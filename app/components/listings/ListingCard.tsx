@@ -17,6 +17,7 @@ interface ListingCardProps{
     actionLabel?: string;
     actionId?: string;
     currentUser?: SafeUser | null;
+    isHomepage?: boolean;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -27,6 +28,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     actionId = "",
     actionLabel,
     currentUser,
+    isHomepage
 }) => {
     const router = useRouter()
     const {getByValue} = useCountries();
@@ -95,11 +97,19 @@ const ListingCard: React.FC<ListingCardProps> = ({
             </div>
             <div className='font-semibold text-lg justify-between flex-row flex'>
                 {location?.region}, {location?.label}
+                {!isHomepage && (
+                <>
                 {data.status === 2 ? (
                     <div className='text-yellow-600'>Pending</div>
-                ): data.status === 3? (
+                ) : data.status === 3 ? (
                     <div className='text-red-500'>Rejected</div>
                 ) : null}
+                {data.status === 1 && (currentUser?.isAdmin || currentUser?.id === data.userId) && (
+                    <div className='text-green-600'>Active</div>
+                )}
+                </>
+                )}
+              
              
             </div>
             <div className='font-light next-neutral-500 justify-between'>

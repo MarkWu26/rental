@@ -17,6 +17,10 @@ export async function PATCH(
         return NextResponse.error()
     }
 
+    const body = await request.json();
+
+    const {reason} = body;
+
     const {listingId} = params;
 
     if(!listingId || typeof listingId !== 'string'){
@@ -28,7 +32,8 @@ export async function PATCH(
             id: listingId,
         },
         data:{
-            status: 3
+            status: 3,
+            reason: reason
         }
     })
 

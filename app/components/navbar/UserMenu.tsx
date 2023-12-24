@@ -21,12 +21,13 @@ interface UserMenuProps{
 const UserMenu: React.FC<UserMenuProps> = ({
     currentUser
 }) => {
+    console.log('YOOO', currentUser)
     const router = useRouter();
     const registerModal = useRegisterModal()
     const loginModal = useLoginModal()
     const rentModal = useRentModal()
     const [isOpen, setIsOpen] = useState(false)
-    
+ 
    
     const toggleOpen = useCallback(()=>{
         setIsOpen((value)=> !value)
@@ -64,7 +65,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                 />
                 </div>
             )}
-            
+            {currentUser?.isAdmin !}
             <div
             onClick={onRent}
             className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
@@ -84,8 +85,12 @@ const UserMenu: React.FC<UserMenuProps> = ({
         {isOpen && (
             <div className="rounded-xl absolute shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
                     <div className="flex flex-col cursor-pointer">
-                        {currentUser ? (
+                        {(currentUser && (currentUser?.isAdmin === false || currentUser?.isAdmin === null) )? (
                               <>
+                              <div className='text-md font-semibold px-4 py-3 cursor-auto'>
+                                Hi {currentUser?.name} ! 👋
+                              </div>
+                              <hr/>
                               <MenuItem onClick={()=> router.push('/trips')} 
                               label="My trips"/>
                               <MenuItem onClick={()=>router.push('/favorites')} 
@@ -100,9 +105,22 @@ const UserMenu: React.FC<UserMenuProps> = ({
                               
                               <MenuItem onClick={signout} 
                               label="Logout"/>
-                  
                             
                               </>
+                        ) : currentUser?.isAdmin ? (
+                            <>
+                                <div className='text-md font-semibold px-4 py-3 cursor-auto'>
+                                    Hi Admin!
+                                </div>
+                                <hr/>
+                                <MenuItem 
+                                    onClick={()=> router.push('/admin')} 
+                                    label="Manage properties"
+                                />
+                                <MenuItem onClick={signout} 
+                                    label="Logout"
+                                />
+                            </>
                         ) : (
                             <>
                             <MenuItem onClick={loginModal.onOpen} label="Login"/>
