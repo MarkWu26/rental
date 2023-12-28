@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 interface HomeClientProps{
     currentUser: SafeUser | null;
-    listings: SafeListings | null;
+    listings: SafeListings [] | null;
     
 }
 
@@ -22,7 +22,6 @@ const HomeClient: React.FC<HomeClientProps> = ({
     const router = useRouter()
     useEffect(()=>{
         if(currentUser?.isAdmin){
-            console.log(currentUser?.isAdmin)
             return router.push('/admin')
         }
     }, [router, currentUser?.isAdmin])

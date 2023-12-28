@@ -18,6 +18,7 @@ import useSuccessModal from "@/app/hooks/useSuccessModal";
 import axios from 'axios'
 import { useRouter } from "next/navigation";
 import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
+import useReviewModal from "@/app/hooks/useReviewModal";
 
 interface ListingHeadProps{
     title: string;
@@ -53,6 +54,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     const editModal = useEditPropertyModal();
     const rejectModal = useRejectPropertyModal();
     const successModal = useSuccessModal();
+    const addReviewModal = useReviewModal();
     const router = useRouter();
 
     const onApprove= useCallback(()=>{
@@ -216,6 +218,21 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         {(userId !== currentUser?.id && (currentUser?.isAdmin === false || currentUser?.isAdmin === null)) 
         && (
              <>
+             <button
+              className="
+              items-center 
+              flex py-[10px] 
+              rounded-[10px]
+              bg-rose-500
+              text-white
+              px-6 
+              gap-x-2
+              text-md hover:opacity-90"
+              onClick={()=>addReviewModal.onOpen()}
+             >
+               
+                Review
+             </button>
              <button 
                 className="
                 items-center 

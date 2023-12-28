@@ -18,6 +18,7 @@ import SuccessModal from './components/modals/SuccessModal'
 import AuthContext from './context/AuthContext'
 import LayoutClient from './LayoutClient'
 import ReservationModal from './components/modals/ReservationModal'
+import AddReviewModal from './components/modals/AddReviewModal'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -37,7 +38,6 @@ export default async function RootLayout({
  
   
   const currentUser = await getCurrentUser();
-  console.log('the currentUser is', currentUser)
   return (
     <html lang="en">
       <body className={font.className}>
@@ -55,7 +55,8 @@ export default async function RootLayout({
           <RejectReservationModal/>
           <SuccessModal/>
           <ReservationModal/>
-          <Navbar/>
+          <AddReviewModal/>
+          <Navbar currentUser={currentUser}/>
         </ClientOnly>
         <LayoutClient>{children}</LayoutClient>
         </AuthContext>

@@ -5,16 +5,18 @@ import React from 'react'
 
 interface AvatarProps{
   src?: string | null | undefined
+  isReview?: boolean
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  src
+  src,
+  isReview = false
 }) => {
   return (
     <Image
     className="rounded-full"
-    height="30"
-    width="30"
+    height={isReview ? '40' : '30'}
+    width={isReview ? '40' : '30'}
     alt="Avatar"
     src={src || "/images/placeholder.jpg"}
     />

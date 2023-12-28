@@ -1,4 +1,4 @@
-import {User, Listing, Reservation, Conversation, Message} from '@prisma/client'
+import {User, Listing, Reservation, Conversation, Message, Review} from '@prisma/client'
 
 export type SafeListings = Omit <
     Listing,
@@ -48,3 +48,13 @@ export type FullConversationType = Conversation & {
   users: User[]; 
   messages: FullMessageType[]
 };
+
+export type SafeReview = Omit <
+    Review,
+    "createdAt" | "updatedAt" | "ratingValue"
+> & {
+    createdAt: string;
+    updatedAt: string;
+    ratingValue: number;
+    
+}

@@ -8,7 +8,7 @@ import ListingCategory from "./ReservationCategory";
 import dynamic from "next/dynamic";
 
 interface ReservationInfoProps{
-    user: SafeUser;
+    user?: SafeUser | null;
     description: string;
     guestCount: number;
     roomCount: number;

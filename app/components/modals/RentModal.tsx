@@ -15,6 +15,7 @@ import Input from '../inputs/Input';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import useSuccessModal from '@/app/hooks/useSuccessModal';
 
 
 enum STEPS {
@@ -30,7 +31,9 @@ enum STEPS {
 
 const RentModal = () => {
     const rentModal = useRentModal();
+    const successModal = useSuccessModal();
     const router = useRouter()
+    
 
     const [step, setStep] = useState(STEPS.CATEGORY);
     const [isLoading, setIsLoading] = useState(false)
@@ -101,12 +104,12 @@ const RentModal = () => {
 
         axios.post('/api/listings', data)
         .then(()=>{
-            toast.success('Listing Created!');
+            rentModal.onClose()
             router.refresh()
             router.push('/properties')
             reset();
             setStep(STEPS.CATEGORY);
-            rentModal.onClose()
+            successModal.onOpen('Listing Successfully Created!', 'PLease wait for 24 hours for the verification of your property.')
         }).catch(()=>{
             toast.error('Something went wrong')
         }).finally(()=>{

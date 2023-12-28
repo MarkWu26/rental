@@ -15,6 +15,7 @@ interface ModalProps{
     disabled?: boolean
     secondaryAction?: ()=>void;
     secondaryActionLabel?: string;
+    isReview?: boolean //if the modal is review
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -27,7 +28,8 @@ const Modal: React.FC<ModalProps> = ({
     actionLabel, 
     disabled, 
     secondaryAction, 
-    secondaryActionLabel
+    secondaryActionLabel,
+    isReview = false
 }) =>{
     const [showModal, setShowModal] = useState(isOpen)
 
@@ -36,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({
     }, [isOpen])
 
     const handleClose = useCallback(()=>{
-        if(disabled){
+        if(disabled && !isReview){ //if the modal is Review Modal allow closing of the modal
             return;
         }
 

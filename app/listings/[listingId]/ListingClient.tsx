@@ -1,13 +1,15 @@
 'use client'
 
 import Container from "@/app/components/Container";
+import Reviews from "@/app/components/Reviews";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
 import { categories } from "@/app/components/navbar/Categories";
 import useLoginModal from "@/app/hooks/useLoginModal";
+import useReviewModal from "@/app/hooks/useReviewModal";
 import useSuccessModal from "@/app/hooks/useSuccessModal";
-import { SafeListings, SafeReservation, SafeUser } from "@/app/types";
+import { SafeListings, SafeReservation, SafeReview, SafeUser } from "@/app/types";
 import axios from "axios";
 import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
 import Image from "next/image";
@@ -27,18 +29,20 @@ interface ListingClientProps{
     listing: SafeListings & {
         user: SafeUser
     }
-    currentUser?: SafeUser | null
+    currentUser?: SafeUser | null;
+    reviews: SafeReview[]
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
     currentUser,
     listing,
-    reservations = []
-
+    reservations = [],
+    reviews
 }) => {
     const loginModal = useLoginModal();
     const router = useRouter();
     const successModal = useSuccessModal();
+    const reviewModal = useReviewModal()
 
     const disabledDates = useMemo(()=>{
         let dates: Date[] = []
@@ -90,11 +94,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
         loginModal
     ]);
 
-    const approveProperty = useCallback(()=>{
-        if(!currentUser?.isAdmin){
-            
-        }
-    }, [])
 
     useEffect(()=>{
         if(dateRange.startDate && dateRange.endDate){
@@ -194,8 +193,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         )}
                        
                     </div>
+                  
                 </div>
             </div>
+             <Reviews
+             reviews={reviews}
+             />
         </div>
     </Container>
   )

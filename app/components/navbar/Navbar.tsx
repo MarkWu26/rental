@@ -1,8 +1,15 @@
 import getCurrentUser from '@/app/actions/getCurrentUser'
 import NavbarClient from './NavbarClient'
+import { SafeUser } from '@/app/types';
 
-const Navbar = async () => {
-  const currentUser = await getCurrentUser();
+interface NavbarProps{
+  currentUser?: SafeUser | null
+}
+
+const Navbar: React.FC<NavbarProps> = async ({
+  currentUser
+}) => {
+  
  
   return (
     <NavbarClient

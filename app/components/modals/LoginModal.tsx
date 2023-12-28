@@ -43,25 +43,44 @@ const LoginModal = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
 
-       signIn('credentials', {
-        ...data,
-        redirect: true,
-       })
-       .then((callback: any)=>{
-        setIsLoading(false);
-        if(callback?.ok){
-            if(data.email === 'admin@gmail.com'){
-                router.push('/admin')
-            } else {
-                router.push('/')
-            }
-        } else {
-            toast.error('Something happened!')
+
+        if(data.email === 'admin@gmail.com'){ //if admin
+            signIn('credentials', {
+                ...data,
+                redirect: false
+            }).then((callback)=>{
+                setIsLoading(false);
+
+                if(callback?.ok){
+                    router.push('/admin');
+                    window.location.reload()
+                    toast.success('successfully logged in!');
+                }
+
+                if(callback?.error){
+                    toast.error(callback.error)
+                }    
+            })
+        } else { //else if user
+            signIn('credentials', {
+                ...data,
+                redirect: false
+            }).then((callback)=>{
+                setIsLoading(false);
+
+                if(callback?.ok){
+                    window.location.reload();
+                    loginModal.onClose();
+                    toast.success('successfully logged in!');
+                }
+
+                if(callback?.error){
+                    toast.error(callback.error)
+                }    
+            })
         }
-       router.refresh();
-       }).finally(()=>{
-        loginModal.onClose()
-       })
+
+      
     }
 
     const toggle = useCallback(()=>{

@@ -29,8 +29,9 @@ const NavbarClient: React.FC<NavbarClientProps> = ({
   }, [pathname, router]);
 
 console.log('client: ', currentUser)
-  const [body, setBody] = useState<JSX.Element | null>(
-  <ClientOnly>
+
+  let navbarBody = (
+<ClientOnly>
     <div className="fixed w-full bg-white z-10 shadow-sm">
         <div className="py-4 border-b-[1px]">
             <Container>
@@ -54,10 +55,17 @@ console.log('client: ', currentUser)
         <Filter currentUser={currentUser}/>
         <Categories/>
     </div>
-    </ClientOnly>)
+    </ClientOnly>
+  )
+
+  const [body, setBody] = useState<JSX.Element | null>(navbarBody)
 
  
-
+                    useEffect(()=>{
+                      if(!body){
+                        setBody(navbarBody)
+                      }
+                    }, [])
   
 
   return body
