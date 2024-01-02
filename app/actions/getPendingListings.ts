@@ -28,7 +28,9 @@ export default async function getPendingListings(
 
         const safeListings = listings.map((listing)=>({
             ...listing,
-            createdAt: listing.createdAt.toISOString()
+            createdAt: listing.createdAt.toISOString(),
+            checkinTime: listing.checkinTime.toISOString(),
+            checkoutTime: listing.checkoutTime.toISOString(),
         }))
 
         return safeListings;

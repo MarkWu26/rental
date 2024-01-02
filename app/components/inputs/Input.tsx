@@ -12,10 +12,11 @@ interface InputProps{
     register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
     textarea?: boolean;
+    comment?: string;
 }
 
 import React from 'react'
-import { BiDollar } from 'react-icons/bi';
+import { TbCurrencyPeso } from "react-icons/tb";
 
 
 const Input: React.FC<InputProps> = ({
@@ -27,22 +28,22 @@ const Input: React.FC<InputProps> = ({
     required,
     register,
     errors,
-    textarea = false
+    textarea = false,
+    comment
 }) => {
-
   let content;
 
   if(textarea){
     content = (
       <div className='w-full relative flex flex-col gap-2'>
       {formatPrice && (
-          <BiDollar size={24} className="text-neutral-700 absolute top-5 
-          left-2"/>
+          <TbCurrencyPeso size={24} className="text-neutral-700 absolute top-5 left-2"/>
       )}
        <label
       className={`   
       text-md
       z-10
+      text-sm
       origin-[0]
       ${formatPrice ? 'left-9':'left-4'}
       peer-focus:-translate-y-4
@@ -73,7 +74,7 @@ const Input: React.FC<InputProps> = ({
       ${errors[id]?'border-rose-500': 'border-neutral-500'}
       ${errors[id]?'focus:border-rose-500': 'focus:border-black'}
       `}
-      />
+      >{comment}</textarea>
      
   </div>
     )
@@ -81,10 +82,11 @@ const Input: React.FC<InputProps> = ({
     content =
     (<div className='w-full relative'>
     {formatPrice && (
-        <BiDollar size={24} className="text-neutral-700 absolute top-5 
+        <TbCurrencyPeso size={24} className="text-neutral-700 absolute top-5 
         left-2"/>
     )}
     <input
+    min={1}
     id={id}
     disabled={disabled}
     {...register(id, {required})}
@@ -110,6 +112,7 @@ const Input: React.FC<InputProps> = ({
     />
     <label
     className={`
+    text-sm
     absolute
     text-md
     duration-100

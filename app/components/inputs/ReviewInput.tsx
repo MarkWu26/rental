@@ -6,17 +6,23 @@ import { useEffect, useState } from "react"
 interface ReviewInputProps{
   setCustomValue?: (id:string, value: any) => void;
   isReview?: boolean
-  value?: number
+  value?: number | null
+  maxValue?: number | undefined
+  isInfo?: boolean
 }
 
 const ReviewInput: React.FC<ReviewInputProps> = ({
   setCustomValue,
   isReview = false,
-  value = 1
+  value = 1,
+  maxValue = 5,
+  isInfo = false
 }) => {
-  console.log('the value is: ', value)
   const [rating, setRating] = useState<number | null>(value);
-  console.log('the rating is: ', rating)
+
+  useEffect(()=>{
+    setRating(value)
+  }, [value])
 
   const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
     setRating(newValue);
@@ -29,8 +35,9 @@ const ReviewInput: React.FC<ReviewInputProps> = ({
     name="simple-controlled"
     value={rating}
     onChange={handleRatingChange}
-    size={isReview ? 'small' : 'large'}
+    size={isReview ? 'small' : isInfo ? 'medium' : 'large'}
     readOnly={isReview}
+    max={maxValue}
     />
       
     </div>

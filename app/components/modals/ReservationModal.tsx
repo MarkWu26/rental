@@ -15,7 +15,7 @@ import useSuccessModal from '@/app/hooks/useSuccessModal'
 
 enum STEPS{
   IDPICTURE = 0,
-  CONFIRMATION = 1
+  REVIEW = 1
 }
 
 const ReservationModal = () => {
@@ -34,28 +34,6 @@ const ReservationModal = () => {
     const [updatedEnd, setUpdatedEnd] = useState(endDate);
     const [updatedListing, setUpdatedListing] = useState(listingId)
 
-  /*   useEffect(()=>{
-      if(!updatedPrice){
-        setUpdatedPrice(totalPrice)
-      }
-      if(!updatedStart){
-        setUpdatedStart(startDate)
-      }
-      if(!updatedEnd){
-        setUpdatedEnd(endDate)
-      }
-      if(!updatedListing){
-        setUpdatedListing(listingId)
-      }
-    }, [updatedPrice, 
-        totalPrice, 
-        updatedStart, 
-        startDate, 
-        updatedEnd, 
-        endDate, 
-        updatedListing, 
-        listingId]
-        ) */
 
     const onBack = () => {
       setStep((step)=> step - 1)
@@ -66,7 +44,7 @@ const ReservationModal = () => {
     }
 
    const actionLabel = useMemo(()=>{
-      if(step === STEPS.CONFIRMATION){
+      if(step === STEPS.REVIEW){
         return 'Confirm';
       }
 
@@ -133,7 +111,7 @@ const ReservationModal = () => {
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
 
-      if(step !== STEPS.CONFIRMATION){
+      if(step !== STEPS.REVIEW){
         return onNext();
       }
 
@@ -173,12 +151,12 @@ const ReservationModal = () => {
     )
 
    
-    if(step === STEPS.CONFIRMATION){
+    if(step === STEPS.REVIEW){
        bodyContent = (
         <div className='flex flex-col gap-4'>
             <Heading
-                title="Confirm this reservation?"
-                subtitle="Do you really want to confirm this reservation?"
+                title="Review your trip"
+                subtitle="Ensure that your trip details are correct."
                 center
             />
         </div>

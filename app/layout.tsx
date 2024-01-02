@@ -19,6 +19,7 @@ import AuthContext from './context/AuthContext'
 import LayoutClient from './LayoutClient'
 import ReservationModal from './components/modals/ReservationModal'
 import AddReviewModal from './components/modals/AddReviewModal'
+import DeleteReviewModal from './components/modals/DeleteReviewModal'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -54,6 +55,7 @@ export default async function RootLayout({
           <ApproveReservationModal/>
           <RejectReservationModal/>
           <SuccessModal/>
+          <DeleteReviewModal/>
           <ReservationModal/>
           <AddReviewModal/>
           <Navbar currentUser={currentUser}/>

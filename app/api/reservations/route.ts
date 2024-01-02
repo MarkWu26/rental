@@ -23,10 +23,6 @@ export async function POST(
         idImageSrc
     } = body;
 
-    console.log('id image src: ', idImageSrc)
-    console.log('totalPrice ', totalPrice)
-    console.log('listingId ', listingId);
-    console.log('start date', startDate)
 
     if (!listingId || !startDate || !endDate || !totalPrice ){
         return NextResponse.error();

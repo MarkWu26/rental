@@ -1,9 +1,7 @@
 'use client'
 
 import axios from 'axios'
-
-import { useCallback, useState } from 'react'
-
+import { useCallback, useEffect, useState } from 'react'
 import Modal from './Modal'
 import Heading from '../Heading'
 import {toast} from 'react-hot-toast'
@@ -12,11 +10,10 @@ import useRejectPropertyModal from '@/app/hooks/useRejectPropertyModal'
 import Input from '../inputs/Input'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 
-
 const RejectPropertyModal = () => {
     const router = useRouter();
     const rejectModal = useRejectPropertyModal();
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
   
     const toggle = useCallback(()=>{
         rejectModal.onClose();
@@ -27,7 +24,7 @@ const RejectPropertyModal = () => {
     const {
       register, 
       handleSubmit,
-      setValue,
+      watch,
       formState: {
         errors
       }
@@ -36,6 +33,8 @@ const RejectPropertyModal = () => {
         reason: ''
       }
     })
+
+    const reason = watch('reason');
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
       setIsLoading(true);

@@ -16,6 +16,7 @@ interface ModalProps{
     secondaryAction?: ()=>void;
     secondaryActionLabel?: string;
     isReview?: boolean //if the modal is review
+    isInputDisabled?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -29,7 +30,8 @@ const Modal: React.FC<ModalProps> = ({
     disabled, 
     secondaryAction, 
     secondaryActionLabel,
-    isReview = false
+    isReview = false,
+    isInputDisabled
 }) =>{
     const [showModal, setShowModal] = useState(isOpen)
 
@@ -38,9 +40,9 @@ const Modal: React.FC<ModalProps> = ({
     }, [isOpen])
 
     const handleClose = useCallback(()=>{
-        if(disabled && !isReview){ //if the modal is Review Modal allow closing of the modal
+      /*   if(disabled && !isReview){ //if the modal is Review Modal allow closing of the modal
             return;
-        }
+        } */
 
         setShowModal(false);
         setTimeout(()=>{
@@ -57,11 +59,11 @@ const Modal: React.FC<ModalProps> = ({
     }, [disabled, onSubmit])
 
     const handleSecondaryAction = useCallback(()=>{
-        if(disabled || !secondaryAction){
+       /*  if(disabled || !secondaryAction){
             return;
-        }
-        secondaryAction()
-    }, [disabled, secondaryAction])
+        } */
+        secondaryAction?.()
+    }, [secondaryAction])
 
     if(!isOpen){
         return null;
@@ -113,7 +115,7 @@ const Modal: React.FC<ModalProps> = ({
                                     {secondaryAction && secondaryActionLabel && (
                                         <Button
                                         outline
-                                        disabled={disabled}
+                                        /* disabled={disabled} */
                                         label={secondaryActionLabel}
                                         onClick={handleSecondaryAction}
                                         />

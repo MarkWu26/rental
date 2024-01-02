@@ -7,13 +7,11 @@ import ListingInfo from "@/app/components/listings/ListingInfo";
 import ListingReservation from "@/app/components/listings/ListingReservation";
 import { categories } from "@/app/components/navbar/Categories";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import useReviewModal from "@/app/hooks/useReviewModal";
 import useSuccessModal from "@/app/hooks/useSuccessModal";
 import { SafeListings, SafeReservation, SafeReview, SafeUser } from "@/app/types";
 import axios from "axios";
 import { eachDayOfInterval, differenceInCalendarDays } from "date-fns";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import {toast} from "react-hot-toast";
@@ -30,19 +28,32 @@ interface ListingClientProps{
         user: SafeUser
     }
     currentUser?: SafeUser | null;
-    reviews: SafeReview[]
+    reviews: SafeReview[];
+    reservation: SafeReservation[];
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
     currentUser,
     listing,
     reservations = [],
-    reviews
+    reviews,
+    reservation,
 }) => {
     const loginModal = useLoginModal();
-    const router = useRouter();
     const successModal = useSuccessModal();
-    const reviewModal = useReviewModal()
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [dayDiff, setDayDiff] = useState<number | undefined>(undefined)
+
+    const averageRating = useMemo(()=>{
+        //get all the ratings
+        const ratingValues = reviews.map((review)=> review.ratingValue);
+
+        //get the averageRating
+        const average = ratingValues.reduce((sum, value) => sum + value, 0) / ratingValues.length
+
+        return `${average.toFixed(2)} / 5.0`
+    }, [reviews])
+
 
     const disabledDates = useMemo(()=>{
         let dates: Date[] = []
@@ -60,8 +71,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
     }, [reservations])
 
     const [isLoading, setIsLoading] = useState(false);
+    const [pricePerNight, setPricePerNight] = useState(listing.price);
     const [totalPrice, setTotalPrice] = useState(listing.price)
     const [dateRange, setDateRange] = useState<Range>(initialDateRange)
+
+    console.log('the date range is: ', dateRange)
 
     const onCreateReservation = useCallback(()=>{
         if(!currentUser){
@@ -94,6 +108,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         loginModal
     ]);
 
+    console.log('error mssg: ', errorMessage)
 
     useEffect(()=>{
         if(dateRange.startDate && dateRange.endDate){
@@ -102,16 +117,44 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 dateRange.startDate
             )
             if(dayCount && listing.price){
-                setTotalPrice(dayCount * listing.price)
+                setTotalPrice((dayCount * listing.price) + listing.cleaningFee)
+                setPricePerNight(dayCount * listing.price)
             } else {
-                setTotalPrice(listing.price)
+                setTotalPrice(listing.price + listing.cleaningFee)
+                setPricePerNight(listing.price)
             }
+
+            setDayDiff(dayCount);
+
+            if(listing.rentalType === 'shortTerm'){
+                if(dayCount > 28){
+                    // show error message please select less than 28 days because it is a short term rental
+                    setErrorMessage('Please select 28 days or fewer for short-term rental.');  
+                    setIsLoading(true)
+                } else{
+                    setErrorMessage(null)
+                    setIsLoading(false)
+                }
+            } else {
+                if(dayCount < 28) {
+                    // show error message please select more than 28 days rental period
+                    setErrorMessage('Please select more than 28 days for long-term rental.');
+                    setIsLoading(true)
+                } else {
+                    setErrorMessage(null)
+                    setIsLoading(false)
+                }
         }
-    }, [listing.price, dateRange])
+    }}, [listing.price, dateRange, listing.rentalType])
 
     const category = useMemo(()=>{
         return categories.find((item)=> item.label === listing.category)
     }, [listing.category])
+
+    const handleChangeDate = (value: Range) => {
+        setDateRange(value)
+    }
+
   return (
     <Container>
         <div className="max-w-screen-lg mx-auto">
@@ -130,6 +173,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     bathRoomCount={listing.bathRoomCount}
                     guestCount={listing.guestCount}
                     listing={listing}
+                    reservation={reservation}
+                    reviews={reviews}
                 />
                 <div className="
                     grid
@@ -149,6 +194,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         docImageSrc={listing.documentImageSrc}
                         currentUser={currentUser}
                         status={listing.status}
+                        averageRating={averageRating}
+                        checkinTime={listing.checkinTime}
+                        checkoutTime={listing.checkoutTime}
                     />
                     <div
                     className="order-first mb-10 md:order-last md:col-span-3 flex-col flex"
@@ -156,7 +204,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         <ListingReservation
                             price={listing.price}
                             totalPrice={totalPrice}
-                            onChangeDate={(value)=>setDateRange(value)}
+                            onChangeDate={(value)=>handleChangeDate(value)}
                             dateRange={dateRange}
                             onSubmit={onCreateReservation}
                             disabled={isLoading}
@@ -164,7 +212,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             currentUser={currentUser}
                             user={listing.user}
                             listingId={listing.id}
-                          
+                            rentalType={listing.rentalType}
+                            errorMessage={errorMessage}
+                            dayDiff={dayDiff}
+                            cleaningFee={listing.cleaningFee}
+                            pricePerNight={pricePerNight}
                         />
                         {currentUser?.isAdmin && (
                             <hr/>
@@ -198,6 +250,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
             </div>
              <Reviews
              reviews={reviews}
+             currentUser={currentUser}
+             averageRating={averageRating}
              />
         </div>
     </Container>

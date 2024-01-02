@@ -20,7 +20,6 @@ const NavbarClient: React.FC<NavbarClientProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  console.log('navbar client:', currentUser);
 
   useEffect(()=>{
     if(pathname?.includes('/conversations')){
@@ -28,7 +27,6 @@ const NavbarClient: React.FC<NavbarClientProps> = ({
     }
   }, [pathname, router]);
 
-console.log('client: ', currentUser)
 
   let navbarBody = (
 <ClientOnly>

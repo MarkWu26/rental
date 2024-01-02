@@ -73,6 +73,10 @@ model Listing{
   idImageSrc String //image of valid id of user
   documentImageSrc String //image of required documents
   reason String
+  rentalType String //shortTerm or longTerm
+  checkinTime DateTime
+  checkoutTime DateTime
+  cleaningFee Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]

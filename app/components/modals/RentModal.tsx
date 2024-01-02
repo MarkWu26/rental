@@ -1,10 +1,11 @@
 'use client'
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Modal from './Modal'
 import useRentModal from '@/app/hooks/useRentModal'
 import Heading from '../Heading';
 import { categories } from '../navbar/Categories';
+import { rentalTypes } from '../inputs/CategoryInput';
 import CategoryInput from '../inputs/CategoryInput';
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import CountrySelect from '../inputs/CountrySelect';
@@ -16,27 +17,39 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import useSuccessModal from '@/app/hooks/useSuccessModal';
-
+import TimeInput from '../inputs/TimeInput';
+import { HiInformationCircle } from "react-icons/hi2";
+import CleaningInfo from '../CleaningInfo';
 
 enum STEPS {
-    CATEGORY = 0,
-    LOCATION = 1,
-    INFO = 2,
-    IMAGES = 3,
-    DESCRIPTION = 4,
-    PRICE = 5,
-    ID = 6,
-    DOCUMENTS = 7
+    RENTALTYPE = 0,
+    CATEGORY = 1,
+    LOCATION = 2,
+    INFO = 3,
+    IMAGES = 4,
+    DESCRIPTION = 5,
+    TIME = 6,
+    PRICE = 7,
+    ID = 8,
+    DOCUMENTS = 9
 }
 
 const RentModal = () => {
     const rentModal = useRentModal();
     const successModal = useSuccessModal();
     const router = useRouter()
-    
 
-    const [step, setStep] = useState(STEPS.CATEGORY);
+    const [step, setStep] = useState(STEPS.RENTALTYPE);
     const [isLoading, setIsLoading] = useState(false)
+    const [isInputDisabled, setIsInputDisabled] = useState(false);
+    const [isCleaningFee, setIsCleaningFee] = useState(false);
+
+    //when cleaning fee option is checked
+    const handleCleaningFee = () => {
+        setIsCleaningFee((prev)=> !prev)
+    }
+
+    console.log('is Cleaning fee? ', isCleaningFee)
 
     const {
         register,
@@ -49,6 +62,7 @@ const RentModal = () => {
         reset 
     } = useForm<FieldValues>({
         defaultValues: {
+            rentalType: '',
             category: '',
             location: null,
             guestCount: 1,
@@ -56,28 +70,88 @@ const RentModal = () => {
             bathRoomCount: 1,
             imageSrc: '',
             price: 1,
+            cleaningFee: 1,
             title: '',
             description: '',
             isApproved: false,
             documentImageSrc: '',
-            idImageSrc: ''
+            idImageSrc: '',
+            checkoutTime: '',
+            checkinTime: '',
+
         }
     })
 
+    const rentalType = watch('rentalType');
     const category = watch('category')
     const location = watch('location')
     const guestCount = watch('guestCount')
     const roomCount = watch('roomCount')
     const bathRoomCount = watch('bathRoomCount')
+    const title = watch('title')
+    const description = watch('description')
     const imageSrc = watch('imageSrc');
+    const price = watch('price');
+    const cleaningFee = watch('cleaningFee');
+    console.log('the cleaning fee: ', cleaningFee)
+    const checkinTime = watch('checkinTime');
+    const checkoutTime = watch('checkoutTime');
     const documentImageSrc = watch('documentImageSrc');
-    const idImageSrc = watch('idImageSrc')
+    const idImageSrc = watch('idImageSrc');
+
+    useEffect(()=>{ //disable buttons if user did not input anything
+      
+        if(step === STEPS.RENTALTYPE && rentalType === ''){
+            setIsLoading(true)
+        } else if (step === STEPS.RENTALTYPE && rentalType !== ''){
+            setIsLoading(false)
+        }
+
+        if(step === STEPS.CATEGORY && category === ''){
+            setIsLoading(true)
+        } else if (step === STEPS.CATEGORY && category !== '') {
+            setIsLoading(false)
+        }
+
+        if(step === STEPS.IMAGES && (imageSrc === '' || !imageSrc)){
+            console.log('hello?', imageSrc)
+            setIsLoading(true)
+        } else if (step === STEPS.IMAGES && imageSrc !== '') {
+            console.log('hi?')
+            setIsLoading(false)
+        }
+
+        if((step === STEPS.DESCRIPTION) && (title === '' || description === '' )){
+            setIsLoading(true)
+        } else if ((step === STEPS.DESCRIPTION) && (title !== '' || description !== '' )) {
+            setIsLoading(false)
+        }
+        
+        if(step === STEPS.PRICE && (price === '' || cleaningFee === '' || !cleaningFee)){
+            setIsLoading(true)
+        } else if (step === STEPS.PRICE && (price !== '' || cleaningFee !== '' || cleaningFee)) {
+            setIsLoading(false)
+        }
+
+        if(step === STEPS.ID && idImageSrc === ''){
+            setIsLoading(true)
+        } else if (step === STEPS.IMAGES && idImageSrc !== '') {
+            setIsLoading(false)
+        }
+
+        if(step === STEPS.DOCUMENTS && documentImageSrc === ''){
+            setIsLoading(true)
+        } else if (step === STEPS.IMAGES && documentImageSrc !== '') {
+            setIsLoading(false)
+        }
+
+
+    }, [step, rentalType, category, imageSrc, title, description, price, idImageSrc,
+    documentImageSrc, cleaningFee])
 
     const Map = useMemo(()=> dynamic(()=> import('../Map'), {
         ssr:false
     }), [location])
-
-
 
     const setCustomValue = (id: string, value: any) => {
         setValue(id, value, {
@@ -102,18 +176,19 @@ const RentModal = () => {
 
         setIsLoading(true);
 
-        axios.post('/api/listings', data)
+        axios.post('/api/listings', {isCleaningFee, ...data})
         .then(()=>{
             rentModal.onClose()
             router.refresh()
             router.push('/properties')
             reset();
-            setStep(STEPS.CATEGORY);
+            setStep(STEPS.RENTALTYPE);
             successModal.onOpen('Listing Successfully Created!', 'PLease wait for 24 hours for the verification of your property.')
         }).catch(()=>{
             toast.error('Something went wrong')
         }).finally(()=>{
             setIsLoading(false)
+            setIsCleaningFee(false)
         })
     }
 
@@ -125,8 +200,12 @@ const RentModal = () => {
         return 'Next'
     }, [step])
 
+    const rentalDescription = useMemo(()=>{
+        return rentalTypes.filter((rental)=> rental.label === rentalType);
+    }, [rentalTypes, rentalType])
+
     const secondaryActionLabel = useMemo(()=>{
-        if(step === STEPS.CATEGORY){
+        if(step === STEPS.RENTALTYPE){
             return undefined
         }
 
@@ -136,8 +215,8 @@ const RentModal = () => {
     let bodyContent = (
         <div className="flex flex-col gap-8">
             <Heading
-                title="Which of these best describes your place?"
-                subtitle='Pick a category'
+                title="Stay Duration Options"
+                subtitle='Pick a rental type'
             />
             <div className="
                 grid 
@@ -148,19 +227,55 @@ const RentModal = () => {
                 overflow-y-auto
                 "
             >
-                {categories.map((item)=> (
-                    <div key={item.label} className="col-span-1">
+                {rentalTypes.map((rental)=> (
+                    <div key={rental.label}>
                         <CategoryInput
-                        onClick={(category)=>setCustomValue('category', category)}
-                        selected={category === item.label}
-                        label={item.label}
-                        icon={item.icon}
+                        label={rental.label}
+                        name={rental.name}
+                        selected={rentalType === rental.label}
+                        onClick={(rentalType)=> setCustomValue('rentalType', rentalType)}
+                        isRental
                         />
                     </div>
                 ))}
+             
             </div>
+         
+            {rentalDescription[0]?.description}
+           
         </div>
     )
+
+    if(step === STEPS.CATEGORY){
+         bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading
+                    title="Which of these best describes your place?"
+                    subtitle='Pick a category'
+                />
+                <div className="
+                    grid 
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-3
+                    max-h-[50vh]
+                    overflow-y-auto
+                    "
+                >
+                    {categories.map((item)=> (
+                        <div key={item.label} className="col-span-1">
+                            <CategoryInput
+                            onClick={(category)=>setCustomValue('category', category)}
+                            selected={category === item.label}
+                            label={item.label}
+                            icon={item.icon}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     if(step === STEPS.LOCATION){
         bodyContent = (
@@ -238,7 +353,6 @@ const RentModal = () => {
                 <Input
                     id="title"
                     label="Title"
-                    disabled={isLoading}
                     register={register}
                     errors={errors}
                     required
@@ -247,7 +361,6 @@ const RentModal = () => {
                 <Input
                     id="description"
                     label="Description"
-                    disabled={isLoading}
                     register={register}
                     errors={errors}
                     required
@@ -256,9 +369,29 @@ const RentModal = () => {
         )
     }
 
-    if(step === STEPS.PRICE){
+    if(step === STEPS.TIME){
         bodyContent = (
             <div className='flex flex-col gap-8'>
+                <Heading
+                    title="Set Check-in and Checkout Times"
+                    subtitle='Specify the times when guests can check in and check out'
+                />
+                <TimeInput
+                value={checkinTime}
+                onChange={(value)=> setCustomValue('checkinTime', value)}
+                />
+                <TimeInput
+                value={checkoutTime}
+                onChange={(value)=> setCustomValue('checkoutTime', value)}
+                isCheckOut
+                />
+            </div>
+        )
+    }
+
+    if(step === STEPS.PRICE){
+        bodyContent = (
+            <div className='flex flex-col gap-4'>
                 <Heading
                 title="Now, set your price"
                 subtitle='How much do you charge per night?'
@@ -268,11 +401,32 @@ const RentModal = () => {
                     label="price"
                     formatPrice
                     type="number"
-                    disabled={isLoading}
                     register={register}
                     errors={errors}
                     required
                 />
+                <div className='font-light  mt-2 flex flex-col gap-2'>
+                        <div className="font-semibold text-lg">
+                            Additional Pricing Options
+                        </div>
+                        <div className="flex flex-row gap-x-2 text-neutral-600 text-sm">
+                            Tick the box below if you want to provide your guests a cleaning service.
+                        </div>
+                        <CleaningInfo
+                        onClick={handleCleaningFee}
+                        isCleaningFee={isCleaningFee}
+                        />
+                </div>
+                <Input
+                        id="cleaningFee"
+                        label="Cleaning Fee"
+                        formatPrice
+                        type="number"
+                        register={register}
+                        errors={errors}
+                        required
+                        />        
+               
             </div>
         )
     }
@@ -315,9 +469,10 @@ const RentModal = () => {
     onSubmit={handleSubmit(onSubmit)}
     actionLabel={actionLabel}
     secondaryActionLabel={secondaryActionLabel}
-    secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+    secondaryAction={step === STEPS.RENTALTYPE ? undefined : onBack}
     title='Snapp your home!'
     body={bodyContent}
+    disabled={isLoading}
     />
   )
 }

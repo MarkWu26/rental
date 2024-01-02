@@ -1,9 +1,9 @@
 import prisma from '@/app/libs/prismadb'
 
 interface IParams{
-    listingId?: string;
-    userId?: string;
-    authorId?: string;
+    listingId?: string | undefined | null;
+    userId?: string | undefined | null;
+    authorId?: string | undefined| null;
 }
 
 export default async function getReservations(
@@ -13,6 +13,7 @@ export default async function getReservations(
         
     
     const {listingId, userId, authorId} = params;
+
 
     const query: any = {};
 
@@ -45,7 +46,9 @@ export default async function getReservations(
         endDate: reservation.endDate.toISOString(),
         listing:{
             ...reservation.listing,
-            createdAt: reservation.listing.createdAt.toISOString()
+            createdAt: reservation.listing.createdAt.toISOString(),
+            checkinTime: reservation.listing.checkinTime.toISOString(),
+            checkoutTime: reservation.listing.checkoutTime.toISOString(),
         }
     }))
 

@@ -13,7 +13,6 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
 
-
 interface UserMenuProps{
     currentUser?: SafeUser | null
 }
@@ -21,7 +20,7 @@ interface UserMenuProps{
 const UserMenu: React.FC<UserMenuProps> = ({
     currentUser
 }) => {
-    console.log('YOOO', currentUser)
+
     const router = useRouter();
     const registerModal = useRegisterModal()
     const loginModal = useLoginModal()

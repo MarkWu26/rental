@@ -27,10 +27,13 @@ export default async function getListingById(
         return {
             ...listing,
             createdAt: listing.createdAt.toISOString(),
+            checkinTime: listing.checkinTime.toISOString(),
+            checkoutTime: listing.checkoutTime.toISOString(),
             user: {
                 ...listing.user,
                 createdAt: listing.user.createdAt.toISOString(),
                 updatedAt: listing.user.updatedAt.toISOString(),
+                
                 emailVerified: listing.user.emailVerified?.toISOString() || null
             }
         }

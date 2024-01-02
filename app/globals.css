@@ -17,6 +17,11 @@ body,
 
 .rdrMonth{
   width: 100% !important;
+  height: 350px !important;
+}
+
+.rdrInfiniteMonths, .rdrMonthsVertical{
+  height: 350px !important;
 }
 
 .rdrCalendarWrapper{

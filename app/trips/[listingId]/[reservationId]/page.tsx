@@ -6,6 +6,7 @@ import React from 'react'
 import TripsClient from './TripsClient';
 import getReservationById from '@/app/actions/getReservationById';
 import getReservations from '@/app/actions/getReservations';
+import getReviews from '@/app/actions/getReviews';
 
 interface IParams{
   listingId?: string;
@@ -13,12 +14,14 @@ interface IParams{
 }
 
 const TripsPage = async ({params}:{params:IParams}) => {
-    console.log('the params is: ', params)
+
   const listing = await getListingById(params);
   const reservation = await getReservationById(params)
   const allReservations = await getReservations(params)
   const currentUser = await getCurrentUser();
-  console.log('all reservations: ', allReservations)
+  const reviews = await getReviews(params);
+
+  console.log('reviews:', reviews)
 
   if(!listing){
     return (
@@ -35,6 +38,7 @@ const TripsPage = async ({params}:{params:IParams}) => {
         reservation={reservation}
         currentUser={currentUser}
         allReservations={allReservations}
+        reviews={reviews}
       />
     </ClientOnly>
   )

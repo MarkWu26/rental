@@ -1,20 +1,19 @@
 'use client'
 
 import useCountries from "@/app/hooks/useCountries";
-import { SafeListings, SafeUser } from "@/app/types";
+import { SafeListings, SafeUser, SafeReservation, SafeReview } from "@/app/types";
 import Heading from "../Heading";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import { MdOutlineModeEditOutline, MdDeleteOutline } from "react-icons/md";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useApprovePropertyModal from "@/app/hooks/useApprovePropertyModal";
 import useDeletePropertyModal from "@/app/hooks/useDeletePropertyModal";
 import useEditPropertyModal from "@/app/hooks/useEditPropertyModal";
 import useRejectPropertyModal from "@/app/hooks/useRejectPropertyModal";
-import useSuccessModal from "@/app/hooks/useSuccessModal";
 import axios from 'axios'
 import { useRouter } from "next/navigation";
 import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
@@ -34,6 +33,9 @@ interface ListingHeadProps{
     guestCount: Number;
     roomCount: Number;
     listing?: SafeListings | null;
+    reservation: SafeReservation[];
+    reservationStatus?: Number | null;
+    reviews: SafeReview[]
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
@@ -42,10 +44,12 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     imageSrc,
     id,
     currentUser,
-    status,
+    status, //status of the listing 1-accepted, 2-pending, 3-rejected
     userId,
     latlng,
-    listing
+    listing,
+    reservation,
+    reviews
 }) => {
     const {getByValue} = useCountries();
     const loginModal = useLoginModal();
@@ -53,9 +57,40 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     const deleteModal = useDeletePropertyModal()
     const editModal = useEditPropertyModal();
     const rejectModal = useRejectPropertyModal();
-    const successModal = useSuccessModal();
     const addReviewModal = useReviewModal();
     const router = useRouter();
+
+    const today = new Date()
+    
+    //check if the user has completed a trip even once so he can make a review
+    const isTripDone = reservation.some((trip)=>{ 
+        if(reservation.length === 0){
+            return false;
+        } else{
+            const endDate = new Date(trip.endDate);
+          
+            return today.getTime() >= endDate.getTime()
+        }
+    })
+
+    //check if the user has a valid trip
+    const isTripValid = reservation.some((trip)=> trip.status === 3)
+
+    //check if the user already has left a comment on this propery
+    const hasCommented = reviews.some((review)=> 
+        (review.listingId === listing?.id && review.userId === currentUser?.id) 
+    );
+
+    const [showReview, setShowReview] = useState(false)
+
+    //to check if the user has a valid trip and if done then show the review button, else dont show
+    useEffect(()=>{
+        if(!isTripDone || !isTripValid || hasCommented){
+            setShowReview(false)
+        } else {
+            setShowReview(true)
+        }
+    }, [isTripDone, isTripValid, hasCommented])
 
     const onApprove= useCallback(()=>{
         if(!currentUser?.isAdmin){
@@ -80,14 +115,13 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     ]);
 
     const onEdit= useCallback(()=>{
-        console.log('hellooooo')
+        
         if(currentUser?.isAdmin || (currentUser?.id === userId)){
             editModal.onOpen(listing, locationValue, latlng);
         } else{
             return loginModal.onOpen();
         }
 
-        
     }, [currentUser?.isAdmin, 
         editModal, 
         loginModal, 
@@ -218,21 +252,23 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         {(userId !== currentUser?.id && (currentUser?.isAdmin === false || currentUser?.isAdmin === null)) 
         && (
              <>
-             <button
-              className="
-              items-center 
-              flex py-[10px] 
-              rounded-[10px]
-              bg-rose-500
-              text-white
-              px-6 
-              gap-x-2
-              text-md hover:opacity-90"
-              onClick={()=>addReviewModal.onOpen()}
-             >
-               
-                Review
-             </button>
+             {showReview && (
+            <button
+            className="
+            items-center 
+            flex py-[10px] 
+            rounded-[10px]
+            bg-rose-500
+            text-white
+            px-6 
+            gap-x-2
+            text-md hover:opacity-90"
+            onClick={()=>addReviewModal.onOpen()}
+            >
+            Review
+            </button>
+             )}
+         
              <button 
                 className="
                 items-center 

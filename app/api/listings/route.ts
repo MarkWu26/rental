@@ -24,7 +24,12 @@ export async function POST (
         location,
         price,
         idImageSrc,
-        documentImageSrc
+        documentImageSrc,
+        rentalType,
+        checkinTime,
+        checkoutTime,
+        cleaningFee,
+        isCleaningFee
     } = body
 
     Object.keys(body).forEach((value:any)=>{
@@ -33,8 +38,11 @@ export async function POST (
         }
     })
 
-    const listing = await prisma.listing.create({
-        data:{
+    if(cleaningFee < 0 || price < 0){
+        return NextResponse.error();
+    }
+    
+    let data = {
             title,
             description,
             imageSrc,
@@ -49,8 +57,22 @@ export async function POST (
             price: parseInt(price, 10),
             userId: currentUser.id,
             status: 2,
-            reason: ''
-        }
+            reason: '',
+            rentalType,
+            checkinTime,
+            checkoutTime,
+            cleaningFee: parseInt(cleaningFee, 10)
+        
+    } 
+
+    console.log('is cleaning fee? ', isCleaningFee)
+
+    if(!isCleaningFee){
+        data.cleaningFee = 0
+    } 
+
+    const listing = await prisma.listing.create({
+        data:data
     })
 
     return NextResponse.json(listing)

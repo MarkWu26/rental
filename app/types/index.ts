@@ -2,10 +2,12 @@ import {User, Listing, Reservation, Conversation, Message, Review} from '@prisma
 
 export type SafeListings = Omit <
     Listing,
-    "createdAt" | "status"
+    "createdAt" | "status" | "checkinTime" | "checkoutTime"
 > & {
     createdAt: string;
     status: Number;
+    checkinTime: string;
+    checkoutTime: string;
 }
 
 export type SafeReservation = Omit<

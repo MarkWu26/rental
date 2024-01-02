@@ -19,14 +19,16 @@ const AddReviewModal = () => {
     const [listingId, setListingId] = useState<string | undefined | null>('');
     const pathname = usePathname();
     const router = useRouter()
-    console.log('listing iD: ', listingId)
-
-    
 
     useEffect(()=>{
       const parts = pathname?.split('/listings/')[1];
       setListingId(parts);
     }, [])
+
+    const handleClose = () => {
+      ReviewModal.onClose(ReviewModal.comment); 
+      setCustomValue('comment', ReviewModal.comment)
+    }
    
 
     const {
@@ -41,9 +43,8 @@ const AddReviewModal = () => {
     } = useForm<FieldValues>({
       defaultValues:{
         ratingValue: 1,
-        comment: ''
-      }
-    })
+        comment: ReviewModal.comment === '' ? '' : ReviewModal.comment,
+    }})
 
     const star = watch('ratingValue');
     const comment = watch('comment')
@@ -69,25 +70,42 @@ const AddReviewModal = () => {
       axios.post('/api/reviews', newData)
       .then(()=>{
         ReviewModal.onClose();
-        toast.success('Review succesfully submitted!');
+        toast.success('Review successfully submitted!');
         router.refresh();
       }).catch((error)=>{
-        toast.error('something went wrong!');
+        toast.error('Something went wrong!');
         console.log(error)
       }).finally(()=>{
         setDisabled(false);
       })
     }
 
+    const onEdit: SubmitHandler<FieldValues> = (data) => {
+      setDisabled(true);
+
+      axios.put(`/api/reviews/edit/${ReviewModal.reviewId}`, data)
+      .then(()=>{
+        ReviewModal.onClose();
+        toast.success('Review successfully edited!');
+        router.refresh()
+      }).catch((error)=>{
+        toast.error('Something went wrong!');
+        console.log(error)
+      }).finally(()=>{
+        setDisabled(false)
+      })
+    }
+
     let bodyContent = (
         <div className="flex flex-col gap-8 items-center justify-center">
             <Heading
-            title="Add a Review"
+            title={` ${ReviewModal.isEdit? 'Edit your review' : 'Add a review'} `}
             subtitle="Rate your stay, write a review!"
             center
             />
             <ReviewInput
             setCustomValue={setCustomValue}
+            value={ReviewModal?.ratingValue}
             />
             <Input
             id="comment"
@@ -96,15 +114,16 @@ const AddReviewModal = () => {
             errors={errors}
             required
             textarea
+            comment={ReviewModal.comment}
             />
         </div>
     )
 
   return (
     <Modal
-    onClose={ReviewModal.onClose}
+    onClose={handleClose}
     isOpen={ReviewModal.isOpen}
-    onSubmit={handleSubmit(onSubmit)}
+    onSubmit= {ReviewModal.isEdit ? handleSubmit(onEdit) : handleSubmit(onSubmit)}
     actionLabel={'Submit'}
     title='Review'
     body={bodyContent}

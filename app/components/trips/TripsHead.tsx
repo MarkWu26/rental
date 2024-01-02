@@ -49,7 +49,6 @@ const ListingHead: React.FC<ListingHeadProps> = ({
     const deleteModal = useDeletePropertyModal()
     const editModal = useEditPropertyModal();
     const rejectModal = useRejectPropertyModal();
-    const successModal = useSuccessModal();
 
     const onApprove= useCallback(()=>{
         if(!currentUser?.isAdmin){
