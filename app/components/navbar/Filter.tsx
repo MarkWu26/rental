@@ -15,12 +15,11 @@ const Filter: React.FC<FilterProps> = ({
 
     const pathName = usePathname()
 
-    const isAuthorizedPage = pathName === '/properties' || pathName === '/admin'
+    const isAuthorizedPage = pathName === '/properties' || pathName === '/admin' || pathName === '/reservations'
 
     if(!isAuthorizedPage){ //do not render if the current page is not properties or admin page
         return null;
     }
-
     
 
   return (

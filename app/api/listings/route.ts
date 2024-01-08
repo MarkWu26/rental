@@ -65,7 +65,6 @@ export async function POST (
         
     } 
 
-    console.log('is cleaning fee? ', isCleaningFee)
 
     if(!isCleaningFee){
         data.cleaningFee = 0

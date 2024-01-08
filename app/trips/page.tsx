@@ -22,8 +22,6 @@ const TripsPage = async () => {
         userId: currentUser.id
     })
 
-
-    
   
     if(reservations.length === 0) {
         return (

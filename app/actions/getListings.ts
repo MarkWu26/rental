@@ -10,8 +10,6 @@ export default async function getListings(
 ){
     try {
         const {userId, filter} = params;
-        console.log('the current user id is: ', userId)
-     
 
         let query: any = {};
 

@@ -1,9 +1,10 @@
 import prisma from '@/app/libs/prismadb'
 
-interface IParams{
+export interface IParams{
     listingId?: string | undefined | null;
     userId?: string | undefined | null;
     authorId?: string | undefined| null;
+    filter?: string;
 }
 
 export default async function getReservations(
@@ -12,10 +13,18 @@ export default async function getReservations(
     try {
         
     
-    const {listingId, userId, authorId} = params;
+    const {listingId, userId, authorId, filter} = params;
 
 
     const query: any = {};
+
+    if(filter === 'Approved'){
+        query.status = 1
+    } else if (filter === 'Pending'){
+        query.status = 2 
+    } else if (filter === 'Rejected') {
+        query.status = 3
+    }
 
     if(listingId){
         query.listingId = listingId
