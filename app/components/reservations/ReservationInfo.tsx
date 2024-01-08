@@ -91,17 +91,25 @@ const ReservationInfo
 
         </div>
 
-        <div className='flex flex-col gap-2'>
-        <div className="font-semibold text-xl">
-        Reason for rejection:
-        </div>
-        <div className='text-neutral-500'>
-            {rejectionReason}
-        </div>
-        
-        </div>
       </div>
+
       <hr/>
+
+      {rejectionReason !== '' && status === 3 && (
+          <>
+           <div className='flex flex-col gap-2'>
+            <div className="font-semibold text-xl">
+              Reason for rejection:
+            </div>
+            <div className='text-neutral-500'>
+                {rejectionReason} asdgasdfasd
+            </div>
+          </div>
+          <hr/>
+          </>
+      )}
+
+     
       {category && (
         <ListingCategory
           icon={category.icon}
@@ -122,7 +130,7 @@ const ReservationInfo
         <div>
           Guest ID
         </div>
-        <div className="w-full rounded-xl h-[40vh] overflow-hidden relative">
+        <div className="w-full rounded-xl h-[35vh] overflow-hidden relative">
             <Image
             alt="Guest ID Picture"
             src={guestIdPic}

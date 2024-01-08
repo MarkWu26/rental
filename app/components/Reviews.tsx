@@ -62,7 +62,8 @@ const Reviews: React.FC<ReviewProps> = ({
         <div>
             {userReview.map((review)=> (
             <>
-            <div key={review.id}
+            <div 
+            key={review.id}
             className='flex flex-col gap-8 py-4'
             >
             <Review
@@ -70,9 +71,12 @@ const Reviews: React.FC<ReviewProps> = ({
             isUserReview 
             ratingValue={review.ratingValue}
             comment={review.comment}
+            key={review.id}
             />
             </div>
-            <hr/>
+            <hr
+            key={review.id}
+            />
             </>
             ))}
 

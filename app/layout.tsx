@@ -20,6 +20,7 @@ import LayoutClient from './LayoutClient'
 import ReservationModal from './components/modals/ReservationModal'
 import AddReviewModal from './components/modals/AddReviewModal'
 import DeleteReviewModal from './components/modals/DeleteReviewModal'
+import DeleteReservationModal from './components/modals/DeleteReservationModal'
 
 const font = Nunito({
   subsets: ["latin"]
@@ -58,6 +59,7 @@ export default async function RootLayout({
           <DeleteReviewModal/>
           <ReservationModal/>
           <AddReviewModal/>
+          <DeleteReservationModal/>
           <Navbar currentUser={currentUser}/>
         </ClientOnly>
         <LayoutClient>{children}</LayoutClient>

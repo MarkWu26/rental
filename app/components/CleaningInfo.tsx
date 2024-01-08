@@ -13,7 +13,6 @@ const CleaningInfo: React.FC<CleaningInfoProps> = ({
     isCleaningFee
 }) => {
 
-    console.log('two isclean?', isCleaningFee)
 
     const [isHovered, setIsHovered] = useState(false)
 

@@ -94,14 +94,19 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                 )}
              
             </div>
-            <div className='font-semibold text-lg justify-between flex-row flex'>
+            <div className='font-semibold text-lg justify-between flex-row flex items-center'>
                 {location?.region}, {location?.label}
                 {reservation?.status === 2 ? (
-                    <div className='text-yellow-600'>Pending</div>
+                    <div className='text-indigo-500 bg-indigo-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>Pending</div>
                 ): reservation?.status === 3? (
-                    <div className='text-red-500'>Rejected</div>
+                    <div className='text-red-500 bg-red-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>Rejected</div>
                 ) : (
-                    <div className='text-green-500'>Confirmed</div>
+                    <div className='text-green-500 bg-green-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>
+                        Confirmed
+                    </div>
                 )}
              
             </div>
@@ -111,7 +116,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
             </div>
             <div className="flex flex-row items-center gap-1">
                 <div className='font-semibold'>
-                    $ {price}
+                ₱ {price}
                 </div>
                 {!reservation && (
                     <div className="font-light">night</div>

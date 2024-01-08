@@ -114,7 +114,7 @@ const MapComponent = () => {
   return (
     <MapContainer
         center={center as L.LatLngExpression || [51, -0.09]}
-        zoom={isDraggable ? zoom : 15}
+        zoom={isDraggable ? zoom : 13}
         scrollWheelZoom={true}
         className='h-[35vh] rounded-lg'
         

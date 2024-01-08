@@ -11,6 +11,7 @@ const nextConfig = {
             config.externals = [...config.externals, 'bcrypt'];
             return config;
           },
+    transpilePackages: ['@mui/x-charts'],
 }
 
 module.exports = nextConfig

@@ -49,7 +49,13 @@ const RentModal = () => {
         setIsCleaningFee((prev)=> !prev)
     }
 
-    console.log('is Cleaning fee? ', isCleaningFee)
+    const initialLocation = {
+        value: 'PH',
+        label: 'Philippines',
+        flag: 'PH',
+        latlng: [14.572324459227225, 120.97047198161289],
+        region: 'Asia'
+    }
 
     const {
         register,
@@ -64,7 +70,7 @@ const RentModal = () => {
         defaultValues: {
             rentalType: '',
             category: '',
-            location: null,
+            location: initialLocation,
             guestCount: 1,
             roomCount: 1,
             bathRoomCount: 1,
@@ -93,7 +99,7 @@ const RentModal = () => {
     const imageSrc = watch('imageSrc');
     const price = watch('price');
     const cleaningFee = watch('cleaningFee');
-    console.log('the cleaning fee: ', cleaningFee)
+    console.log('the location : ', location)
     const checkinTime = watch('checkinTime');
     const checkoutTime = watch('checkoutTime');
     const documentImageSrc = watch('documentImageSrc');
@@ -110,6 +116,12 @@ const RentModal = () => {
         if(step === STEPS.CATEGORY && category === ''){
             setIsLoading(true)
         } else if (step === STEPS.CATEGORY && category !== '') {
+            setIsLoading(false)
+        }
+
+        if(step === STEPS.LOCATION && (location === '' || location === null || !location)){
+            setIsLoading(true)
+        } else if (step === STEPS.LOCATION && (location !== '' || location !== null || location)){
             setIsLoading(false)
         }
 
@@ -135,19 +147,19 @@ const RentModal = () => {
 
         if(step === STEPS.ID && idImageSrc === ''){
             setIsLoading(true)
-        } else if (step === STEPS.IMAGES && idImageSrc !== '') {
+        } else if (step === STEPS.ID && idImageSrc !== '') {
             setIsLoading(false)
         }
 
         if(step === STEPS.DOCUMENTS && documentImageSrc === ''){
             setIsLoading(true)
-        } else if (step === STEPS.IMAGES && documentImageSrc !== '') {
+        } else if (step === STEPS.DOCUMENTS && documentImageSrc !== '') {
             setIsLoading(false)
         }
 
 
     }, [step, rentalType, category, imageSrc, title, description, price, idImageSrc,
-    documentImageSrc, cleaningFee])
+    documentImageSrc, cleaningFee, location])
 
     const Map = useMemo(()=> dynamic(()=> import('../Map'), {
         ssr:false
@@ -289,7 +301,7 @@ const RentModal = () => {
                 value={location}
                 />
                 <Map
-                    center={location?.latlng}
+                    center={location?.latlng || [14.572324459227225, 120.97047198161289]}
                     onChange={(value)=> setCustomValue('location', value)}
                     value={location}
                     isDraggable={true}

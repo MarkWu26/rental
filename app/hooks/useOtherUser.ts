@@ -14,6 +14,8 @@ const useOtherUser = (conversation: FullConversationType | { users: User[] }) =>
     return otherUser[0];
   }, [session.data?.user?.email, conversation.users]);
 
+  console.log('other user: ', otherUser)
+
   return otherUser;
 };
 

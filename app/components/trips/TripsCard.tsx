@@ -96,9 +96,13 @@ const TripsCard: React.FC<TripsCardProps> = ({
             <div className='font-semibold text-lg justify-between flex-row flex'>
                 {location?.region}, {location?.label}
                 {reservation?.status === 2 ? (
-                    <div className='text-yellow-600'>Pending</div>
+                    <div className='text-purple-500 bg-purple-100 font-bold text-base px-2 py-[2px] rounded-md'>
+                        Pending
+                    </div>
                 ): reservation?.status === 3? (
-                    <div className='text-red-500'>Rejected</div>
+                    <div className='text-red-500 bg-red-100 font-bold text-sm px-2 py-1 rounded-md'>
+                        Rejected
+                    </div>
                 ) : null}
              
             </div>
@@ -107,7 +111,7 @@ const TripsCard: React.FC<TripsCardProps> = ({
        
             </div>
             <div className="flex flex-row items-center gap-1">
-                <div className='font-semibold'>
+                <div className='font-semisemibold text-sm'>
                     $ {price}
                 </div>
                 {!reservation && (

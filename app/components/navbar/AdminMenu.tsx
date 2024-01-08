@@ -20,7 +20,6 @@ interface AdminMenuProps{
 const AdminMenu: React.FC<AdminMenuProps> = ({
     currentUser
 }) => {
-    console.log('HAHAHA', currentUser)
     const router = useRouter();
     const registerModal = useRegisterModal()
     const loginModal = useLoginModal()

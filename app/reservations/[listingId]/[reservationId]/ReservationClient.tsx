@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import {toast} from "react-hot-toast";
+import {format} from 'date-fns'
 
 const initialDateRange = {
     startDate: new Date(),
@@ -54,9 +55,6 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             dates = [...dates, ...range]
 
         })
-            
-         
-        
 
         return dates
     }, [reservation])
@@ -102,6 +100,27 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         }
     }, [])
 
+    const reservationDate = useMemo(()=>{
+        if(!reservation){
+            return null;
+        }
+
+        const start = new Date(reservation.startDate);
+        const end = new Date(reservation.endDate)
+
+        return `${format(start, 'PP')} - ${format(end, 'PP')}`
+    }, [reservation, reservation.startDate, reservation.endDate])
+
+    const dayDiff = useMemo(()=>{
+        const startDate = new Date (reservation.startDate);
+        const endDate = new Date (reservation.endDate);
+        const dayCount = differenceInCalendarDays(endDate, startDate);
+
+        return dayCount;
+    }, [])
+
+
+
     useEffect(()=>{
         if(dateRange.startDate && dateRange.endDate){
             const dayCount = differenceInCalendarDays(
@@ -138,6 +157,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                     guestCount={listing.guestCount}
                     listing={listing}
                     reservationId={reservation.id}
+                    renteeId={reservation.userId}
                 />
                 <div className="
                     grid
@@ -169,7 +189,13 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                             onSubmit={onCreateReservation}
                             disabled={isLoading}
                             disabledDates={disabledDates}
-                           
+                            reservationDate={reservationDate}
+                            startDate={reservation.startDate}
+                            endDate={reservation.endDate}
+                            dayDiff={dayDiff}
+                            status={reservation.status}
+                            reason={reservation.reason}
+                            cleaningFee={listing.cleaningFee}
                         />
                     </div>
                 </div>

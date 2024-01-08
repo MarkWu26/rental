@@ -8,6 +8,7 @@ import useReservationModal from '@/app/hooks/useReservationModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import { useMemo } from 'react';
 import { format } from 'date-fns';
+import RentalTypeInfo from '../RentalTypeInfo';
 
 
 interface ListingReservationProps{
@@ -25,7 +26,13 @@ interface ListingReservationProps{
     errorMessage?: string | null
     dayDiff?: number | null | undefined;
     cleaningFee?: number | undefined;
-    pricePerNight?: number | undefined
+    pricePerNight?: number | undefined;
+    listingName: string;
+    bathroomCount: number;
+    roomCount: number;
+    category: string;
+    listingImage: string;
+   
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -33,7 +40,6 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     totalPrice,
     onChangeDate,
     dateRange,
-    onSubmit,
     disabledDates,
     disabled,
     currentUser,
@@ -43,7 +49,12 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     errorMessage = null,
     dayDiff,
     cleaningFee = 0,
-    pricePerNight
+    pricePerNight,
+    listingName,
+    bathroomCount,
+    roomCount,
+    category,
+    listingImage,
 }) => {
     const reservationModal = useReservationModal();
     const loginModal = useLoginModal();
@@ -73,7 +84,8 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
             return loginModal.onOpen()
         } 
         reservationModal.onOpen(totalPrice, dateRange.startDate, 
-            dateRange.endDate, listingId)
+            dateRange.endDate, listingId, listingName, bathroomCount, roomCount, category, listingImage, 
+            checkoutDate, checkinDate, price, dayDiff, pricePerNight, cleaningFee)
     }
 
   return (
@@ -96,8 +108,14 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 / night
                 </div>
             </div>
-           <div className="font-semibold text-lg border-b-[1px] border-rose-500">
-           {rentalType === 'longTerm' ? 'Long Term Rental' : 'Short Term Rental'}
+           <div className="font-semibold text-lg  flex flex-row items-center gap-x-2">
+            <div className="border-b-[1px] border-rose-500">
+            {rentalType === 'longTerm' ? 'Long Term Rental' : 'Short Term Rental'}
+            </div>
+         
+           <RentalTypeInfo
+           rentalType={rentalType}
+           />
            </div>
         </div>
 

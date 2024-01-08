@@ -212,10 +212,11 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 items-center 
                 flex py-[10px] 
                 rounded-[10px]
-                bg-yellow-500
-                text-white
+                bg-indigo-500
+                text-indigo-50
                 px-6 
                 gap-x-2
+                font-semibold
                 text-md hover:opacity-90"
                 onClick={onEdit}
                 >
@@ -274,7 +275,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 items-center 
                 flex py-[10px] 
                 rounded-[10px]
-                bg-indigo-700
+                bg-rose-500
                 text-white
                 px-6 
                 gap-x-2

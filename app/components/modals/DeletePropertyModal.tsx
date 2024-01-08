@@ -19,12 +19,12 @@ const DeletePropertyModal = () => {
         deleteModal.onClose();
     }, [deleteModal])
 
-    const approvingId = useDeletePropertyModal().listingId 
+    const deletingId = useDeletePropertyModal().listingId 
 
     const onSubmit = () => {
       setIsLoading(true);
       
-      axios.delete(`/api/listings/${approvingId}`).then(()=>{
+      axios.delete(`/api/listings/${deletingId}`).then(()=>{
         toast.success('Property Listing Deleted!');
         router.refresh();
         router.push('/admin');

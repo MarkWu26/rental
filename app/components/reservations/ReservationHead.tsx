@@ -7,13 +7,15 @@ import Image from "next/image";
 import HeartButton from "../HeartButton";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
-import { MdOutlineModeEditOutline, MdDeleteOutline } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 import { useCallback } from "react";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useApproveReservation from "@/app/hooks/useApproveReservation";
-import useDeletePropertyModal from "@/app/hooks/useDeletePropertyModal";
-import useEditPropertyModal from "@/app/hooks/useEditPropertyModal";
 import useRejectReservation from "@/app/hooks/useRejectReservation";
+import { HiChatBubbleLeftEllipsis } from "react-icons/hi2";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import useDeleteReservationModal from "@/app/hooks/useDeleteReservationModal";
 
 interface ReservationHeadProps{
     title: string;
@@ -30,6 +32,7 @@ interface ReservationHeadProps{
     roomCount: Number;
     listing?: SafeListings | null;
     reservationId: string;
+    renteeId: string;
 }
 
 const ReservationHead: React.FC<ReservationHeadProps> = ({
@@ -40,16 +43,16 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
     currentUser,
     status,
     userId,
-    latlng,
-    listing,
-    reservationId
+    reservationId,
+    renteeId
 }) => {
     const {getByValue} = useCountries();
     const loginModal = useLoginModal();
     const approveModal = useApproveReservation();
-    const deleteModal = useDeletePropertyModal()
-    const editModal = useEditPropertyModal();
+    const deleteModal = useDeleteReservationModal()
     const rejectModal = useRejectReservation();
+
+    const router = useRouter()
 
     const onApprove= useCallback(()=>{
         if(currentUser?.id !== userId){
@@ -58,9 +61,9 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
         approveModal.onOpen(reservationId);
     }, [currentUser?.id, approveModal, loginModal, reservationId, userId]);
 
-    const onDelete= useCallback(()=>{
+    const onCancel= useCallback(()=>{
         if(currentUser?.isAdmin || (currentUser?.id === userId)){
-            deleteModal.onOpen(id);
+            deleteModal.onOpen(reservationId);
         } else {
             return loginModal.onOpen();
         }
@@ -72,23 +75,6 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
             userId
             ]
     );
-
-    const onEdit= useCallback(()=>{
-        console.log('hellooooo')
-        if(currentUser?.isAdmin || (currentUser?.id === userId)){
-            editModal.onOpen(listing, locationValue, latlng);
-        } else{
-            return loginModal.onOpen();
-        }
-    }, [currentUser?.isAdmin, 
-        editModal, 
-        loginModal, 
-        listing, 
-        locationValue, 
-        latlng,
-        currentUser?.id,
-        userId
-    ])
 
     const onReject= useCallback(()=>{
         if(currentUser?.id === userId || currentUser?.isAdmin){
@@ -106,6 +92,13 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
         reservationId
     ])
 
+    const onCreateChat = useCallback(()=>{
+        axios.post('/api/conversations', { userId: renteeId })
+        .then((data) => {
+          router.push(`/conversations/${data.data.id}`);
+        })
+    }, [router, renteeId])
+
     const location = getByValue(locationValue)
   return (
    <>
@@ -115,6 +108,7 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
             subtitle={`${location?.region}, ${location?.label}`}
         />
          <div className="items-center flex gap-x-4 flex-row">
+            
         {userId === currentUser?.id && status === 2 && (
             <>
                 <button 
@@ -156,28 +150,6 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
             </>
             
         )}
-        {(currentUser?.isAdmin || userId === currentUser?.id) && (
-            <>
-                <button 
-                className="
-                items-center 
-                flex py-[10px] 
-                rounded-[10px]
-                bg-yellow-500
-                text-white
-                px-6 
-                gap-x-2
-                text-md hover:opacity-90"
-                onClick={onEdit}
-                >
-                    <div></div>
-                    Edit
-                    <MdOutlineModeEditOutline
-                        size={22}
-                    />
-                </button>
-            </>
-        )}
         {status !== 2 && (userId === currentUser?.id || currentUser?.isAdmin) && (
             <>
              <button 
@@ -190,16 +162,35 @@ const ReservationHead: React.FC<ReservationHeadProps> = ({
                 px-6 
                 gap-x-2
                 text-md hover:opacity-90"
-                onClick={onDelete}
+                onClick={onCancel}
                 >
                     <div></div>
-                    Delete
-                    <MdDeleteOutline
+                    Cancel reservation
+                    <IoClose
                         size={22}
                     />
                 </button>
             </>
         )}
+
+        <button 
+            className="
+            items-center 
+            flex py-[10px] 
+            rounded-[10px]
+          bg-rose-500
+            text-white
+            px-6 
+            gap-x-2
+            text-md hover:opacity-90"
+            onClick={onCreateChat}
+        >
+            <div></div>
+            Chat with rentee
+            <HiChatBubbleLeftEllipsis
+                size={22}
+            />
+        </button>
         </div>
            
         </div>

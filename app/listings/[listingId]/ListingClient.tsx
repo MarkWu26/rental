@@ -217,6 +217,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             dayDiff={dayDiff}
                             cleaningFee={listing.cleaningFee}
                             pricePerNight={pricePerNight}
+                            listingName={listing.title}
+                            bathroomCount={listing.bathRoomCount}
+                            roomCount={listing.roomCount}
+                            category={listing.category}
+                            listingImage={listing.imageSrc}
                         />
                         {currentUser?.isAdmin && (
                             <hr/>

@@ -134,7 +134,9 @@ const TripsClient: React.FC<TripsClientProps> = ({
         const end = new Date(reservation.endDate)
 
         return `${format(start, 'PP')} - ${format(end, 'PP')}`
-    }, [reservation])
+    }, [reservation, reservation.startDate, reservation.endDate]);
+
+    console.log('resrvation date: ', reservationDate)
 
     useEffect(()=>{
         if(dateRange.startDate && dateRange.endDate){
@@ -173,6 +175,8 @@ const TripsClient: React.FC<TripsClientProps> = ({
                     bathRoomCount={listing.bathRoomCount}
                     guestCount={listing.guestCount}
                     listing={listing}
+                    reservationId={reservation.id}
+                    guestId={reservation.userId}
                 />
                 <div className="
                     grid
@@ -210,6 +214,8 @@ const TripsClient: React.FC<TripsClientProps> = ({
                             canReview={canReview}
                             status={reservation.status}
                             reason={reservation.reason}
+                            rentalType={listing.rentalType}
+                            cleaningFee={listing.cleaningFee}
                         />
                     </div>
                 </div>

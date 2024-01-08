@@ -98,6 +98,8 @@ const UserMenu: React.FC<UserMenuProps> = ({
                               label="My reservation"/>
                               <MenuItem onClick={()=> router.push('/properties')} 
                               label="My properties"/>
+                              <MenuItem onClick={()=> router.push(`/Dashboard/host/${currentUser.id}`)} 
+                              label="My Dashboard"/>
                               <MenuItem onClick={onRent} 
                               label="Snapp my home"/>
                               <hr/>
@@ -112,6 +114,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
                                     Hi Admin!
                                 </div>
                                 <hr/>
+                                <MenuItem 
+                                    onClick={()=> router.push(`/Dashboard/admin/`)} 
+                                    label="Dashboard"
+                                />
                                 <MenuItem 
                                     onClick={()=> router.push('/admin')} 
                                     label="Manage properties"

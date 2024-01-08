@@ -95,17 +95,20 @@ const ListingCard: React.FC<ListingCardProps> = ({
                 )}
              
             </div>
-            <div className='font-semibold text-lg justify-between flex-row flex'>
+            <div className='font-semibold text-lg justify-between flex-row flex items-center'>
                 {location?.region}, {location?.label}
                 {!isHomepage && (
                 <>
                 {data.status === 2 ? (
-                    <div className='text-yellow-600'>Pending</div>
+                    <div className='text-indigo-500 bg-indigo-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>Pending</div>
                 ) : data.status === 3 ? (
-                    <div className='text-red-500'>Rejected</div>
+                    <div className='text-red-500 bg-red-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>Rejected</div>
                 ) : null}
                 {data.status === 1 && (currentUser?.isAdmin || currentUser?.id === data.userId) && (
-                    <div className='text-green-600'>Active</div>
+                    <div className='text-green-500 bg-green-100 rounded-md 
+                    px-2 py-[2px] font-bold text-sm flex items-center'>Active</div>
                 )}
                 </>
                 )}
@@ -118,7 +121,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             </div>
             <div className="flex flex-row items-center gap-1">
                 <div className='font-semibold'>
-                    $ {price}
+                    ₱ {price}
                 </div>
                 {!reservation && (
                     <div className="font-light">night</div>
